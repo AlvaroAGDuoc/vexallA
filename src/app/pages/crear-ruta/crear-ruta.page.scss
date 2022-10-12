@@ -1,0 +1,25 @@
+// .mapa {
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     width: 320px;
+//     height: 590px;
+// }
+
+ion-content {
+  --background: none;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mapa{
+  display: block;
+  width: 100%;
+  height: 50%;
+  margin-top: 30px;
+}
+
+
+
+
+
