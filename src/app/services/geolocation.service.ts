@@ -1,3 +1,4 @@
+///<reference path="../../.././node_modules/@types/googlemaps/index.d.ts"/>
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
@@ -6,35 +7,100 @@ import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 })
 export class GeolocationService {
   
-  locations = []
+  mapa!: google.maps.Map;
 
   constructor(private geolocation: Geolocation) {  }
 
 
-  getGeolocation(){
-
-
+  inicioMapa(divMap, rutaInicio, rutaFin) {
     this.geolocation.getCurrentPosition().then((resp) => {
-
       console.log('resp ', resp)
-      this.locations[0].geometry.coordinates = [
-        resp.coords.latitude,
-        resp.coords.longitude
-      ]
-
-      return resp;
-
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });
-     
-     let watch = this.geolocation.watchPosition();
-     watch.subscribe((data) => {
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
-     });
+  
+      this.cargarMapa(resp, divMap)
+      this.cargarAutoComplete(rutaInicio, rutaFin,)
+  
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  
   }
+  
+
+  cargarMapa(position: any, divMap): any {
+    const opciones = {
+      center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    this.mapa = new google.maps.Map((divMap.nativeElement), opciones)
+  }
+
+  calcularRuta(ruta1, ruta2, distancia) {
+
+    const directionService = new google.maps.DirectionsService();
+    const directionRender = new google.maps.DirectionsRenderer();
+    ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
+    ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+
+    directionRender.setMap(this.mapa);
+
+    directionService.route({
+      origin: ruta1,
+      destination: ruta2,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, resultado => {
+      console.log(resultado);
+      directionRender.setDirections(resultado)
+
+      distancia = resultado.routes[0].legs[0].distance.text;
+
+     (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + distancia
+    })
+  } 
+
+  cargarAutoComplete(rutaInicio, rutaFin ) {
+    const autocomplete = new google.maps.places.Autocomplete((rutaInicio.nativeElement), {
+      componentRestrictions: {
+        country: ["CL"]
+      },
+      fields: ["address_components", "geometry"],
+      types: ["establishment"]
+    })
+
+    google.maps.event.addListener(autocomplete, 'place_changed', () => {
+      const place: any = autocomplete.getPlace();
+      console.log('El place completo es: ', place)
+
+      this.mapa.setCenter(place.geometry.location);
+      const marker = new google.maps.Marker({
+        position: place.geometry.location
+      });
+      marker.setMap(this.mapa);
+    })
+
+    const autocomplete2 = new google.maps.places.Autocomplete((rutaFin.nativeElement), {
+      componentRestrictions: {
+        country: ["CL"]
+      },
+      fields: ["address_components", "geometry"],
+      types: ["address"],
+    })
+
+    google.maps.event.addListener(autocomplete2, 'place_changed', () => {
+      const place2: any = autocomplete2.getPlace();
+      console.log('El place completo es: ', place2)
+
+      this.mapa.setCenter(place2.geometry.location);
+      const marker = new google.maps.Marker({
+        position: place2.geometry.location
+      });
+      marker.setMap(this.mapa);
+    })
+
+
+  }
+
 }
 
 

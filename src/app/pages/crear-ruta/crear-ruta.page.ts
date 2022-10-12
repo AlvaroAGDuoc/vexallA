@@ -2,9 +2,9 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
+import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,7 @@ export class CrearRutaPage implements OnInit {
   @ViewChild('rutaInicio') rutaInicio!: ElementRef;
   @ViewChild('rutaFin') rutaFin!: ElementRef;
 
-  mapa!: google.maps.Map;
+
 
   distancia;
 
@@ -42,7 +42,7 @@ export class CrearRutaPage implements OnInit {
   patenteSeleccionada = '';
 
 
-  constructor(private geolocation: Geolocation, private bd: BdservicioService,private storage: Storage, private router: Router) {
+  constructor(private router: Router,private bd: BdservicioService,private storage: Storage, private geo: GeolocationService) {
 
 
     this.formMapas = new FormGroup({
@@ -73,41 +73,39 @@ export class CrearRutaPage implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp ', resp)
-
-      this.cargarMapa(resp)
-      this.cargarAutoComplete()
-
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
+    this.geo.inicioMapa( this.divMap, this.rutaInicio, this.rutaFin)
 
 
   }
 
   calcularRuta() {
+    let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value;
+    let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value;
+    this.geo.calcularRuta(ruta1, ruta2, this.distancia)
+  }
 
-      const directionService = new google.maps.DirectionsService();
-      const directionRender = new google.maps.DirectionsRenderer();
-      let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
-      let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+  // calcularRuta() {
 
-      directionRender.setMap(this.mapa);
+  //     const directionService = new google.maps.DirectionsService();
+  //     const directionRender = new google.maps.DirectionsRenderer();
+  //     let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
+  //     let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
 
-      directionService.route({
-        origin: ruta1,
-        destination: ruta2,
-        travelMode: google.maps.TravelMode.DRIVING
-      }, resultado => {
-        console.log(resultado);
-        directionRender.setDirections(resultado)
+  //     directionRender.setMap(this.mapa);
 
-        this.distancia = resultado.routes[0].legs[0].distance.text;
+  //     directionService.route({
+  //       origin: ruta1,
+  //       destination: ruta2,
+  //       travelMode: google.maps.TravelMode.DRIVING
+  //     }, resultado => {
+  //       console.log(resultado);
+  //       directionRender.setDirections(resultado)
 
-       (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + this.distancia
-      })
-    } 
+  //       this.distancia = resultado.routes[0].legs[0].distance.text;
+
+  //      (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + this.distancia
+  //     })
+  //   } 
 
     crearRuta() {
       if(this.formMapas.valid) {
@@ -129,56 +127,56 @@ export class CrearRutaPage implements OnInit {
       }
     }
   
-  private cargarAutoComplete() {
-    const autocomplete = new google.maps.places.Autocomplete((this.rutaInicio.nativeElement), {
-      componentRestrictions: {
-        country: ["CL"]
-      },
-      fields: ["address_components", "geometry"],
-      types: ["establishment"]
-    })
+  // private cargarAutoComplete() {
+  //   const autocomplete = new google.maps.places.Autocomplete((this.rutaInicio.nativeElement), {
+  //     componentRestrictions: {
+  //       country: ["CL"]
+  //     },
+  //     fields: ["address_components", "geometry"],
+  //     types: ["establishment"]
+  //   })
 
-    google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      const place: any = autocomplete.getPlace();
-      console.log('El place completo es: ', place)
+  //   google.maps.event.addListener(autocomplete, 'place_changed', () => {
+  //     const place: any = autocomplete.getPlace();
+  //     console.log('El place completo es: ', place)
 
-      this.mapa.setCenter(place.geometry.location);
-      const marker = new google.maps.Marker({
-        position: place.geometry.location
-      });
-      marker.setMap(this.mapa);
-    })
+  //     this.mapa.setCenter(place.geometry.location);
+  //     const marker = new google.maps.Marker({
+  //       position: place.geometry.location
+  //     });
+  //     marker.setMap(this.mapa);
+  //   })
 
-    const autocomplete2 = new google.maps.places.Autocomplete((this.rutaFin.nativeElement), {
-      componentRestrictions: {
-        country: ["CL"]
-      },
-      fields: ["address_components", "geometry"],
-      types: ["address"],
-    })
+  //   const autocomplete2 = new google.maps.places.Autocomplete((this.rutaFin.nativeElement), {
+  //     componentRestrictions: {
+  //       country: ["CL"]
+  //     },
+  //     fields: ["address_components", "geometry"],
+  //     types: ["address"],
+  //   })
 
-    google.maps.event.addListener(autocomplete2, 'place_changed', () => {
-      const place2: any = autocomplete2.getPlace();
-      console.log('El place completo es: ', place2)
+  //   google.maps.event.addListener(autocomplete2, 'place_changed', () => {
+  //     const place2: any = autocomplete2.getPlace();
+  //     console.log('El place completo es: ', place2)
 
-      this.mapa.setCenter(place2.geometry.location);
-      const marker = new google.maps.Marker({
-        position: place2.geometry.location
-      });
-      marker.setMap(this.mapa);
-    })
+  //     this.mapa.setCenter(place2.geometry.location);
+  //     const marker = new google.maps.Marker({
+  //       position: place2.geometry.location
+  //     });
+  //     marker.setMap(this.mapa);
+  //   })
 
 
-  }
+  // }
 
-  cargarMapa(position: any): any {
-    const opciones = {
-      center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-      zoom: 17,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+  // cargarMapa(position: any): any {
+  //   const opciones = {
+  //     center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+  //     zoom: 17,
+  //     mapTypeId: google.maps.MapTypeId.ROADMAP
+  //   }
 
-    this.mapa = new google.maps.Map((this.divMap.nativeElement), opciones)
-  }
+  //   this.mapa = new google.maps.Map((this.divMap.nativeElement), opciones)
+  // }
 
 }
