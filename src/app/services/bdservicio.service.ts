@@ -20,9 +20,9 @@ export class BdservicioService {
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
   tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
 
-  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), status INTEGER, origen VARCHAR(80), destino VARCHAR(80), usuario_id_usuario INTEGER, foreign key(patente_auto) references AUTO(patente), foreign key(usuario_id_usuario) references USUARIO(id_usuario));";
+  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente));";
 
-  // tablaDetalleViaje = "CREATE"
+  tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, PRIMARY KEY(viaje_id, usuario_id_usuario)  foreign key(usuario_id_usuario) references USUARIO(id_usuario) , foreign key(viaje_id) references VIAJE(id_viaje) ON DELETE CASCADE);";
  
   
   //variable para la sentencia de registros por defecto en la tabla
@@ -108,7 +108,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'basededato9.db',
+        name: 'basededatosssss.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -132,6 +132,7 @@ export class BdservicioService {
       await this.database.executeSql(this.tablaMarca, []);
       await this.database.executeSql(this.tablaAuto, []);
       await this.database.executeSql(this.tablaViaje, []);
+      await this.database.executeSql(this.tablaDetalleViaje, []);
 
       //ejecuto mis registros
       await this.database.executeSql(this.registroRol, []);
@@ -260,11 +261,15 @@ export class BdservicioService {
           }
         }
       }
-      console.log('ID rol', usuario.rol_id)
+
+      let id = this.database.executeSql('SELECT MAX(ID_USUARIO) AS ID FROM USUARIO', []).then(res => console.log("RES MAX", res.rows.item(0).ID))
+
+      console.log('ULTIMA ID: ', id)
       console.log('nombre USUARIO', usuario.nombre_usuario)
       return usuario;
     })
   }
+
 
 
   agregarVehiculo(patente, color, modelo, annio, marca_id, usuario_id) {
@@ -291,15 +296,26 @@ export class BdservicioService {
   }
 
 
-  agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto,id_usuario, status, origen, destino ) {
-    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, status, origen, destino, id_usuario  ];
-    return this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, status, origen, destino, usuario_id_usuario) VALUES (?,?,?,?,?,?,?,?,?)', data).then(res => {
-      this.buscarRutas();
+
+ async agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto,id_usuario, status, origen, destino ) {
+    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino  ];
+    let data2 = [id_usuario, status]
+    let id_viaje
+
+    console.log('DATA2 ANTIGUO', data2)
+    return await this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino) VALUES (?,?,?,?,?,?,?)', data),
+    await this.database.executeSql('SELECT MAX(ID_VIAJE) AS ID FROM VIAJE', []).then(res => {
+      id_viaje = res.rows.item(0).ID
+      let data2A = data2.unshift(id_viaje)
+      console.log('DATA2 ACTUALIZADO ', data2)
+      this.database.executeSql('INSERT INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES (?,?,?)', data2).then(res => {
+        this.buscarRutas();
       })
-  }
+    })  
+ }
 
   buscarRutas() {
-    return this.database.executeSql('SELECT * FROM VIAJE V JOIN USUARIO U ON (V.USUARIO_ID_USUARIO = U.ID_USUARIO) JOIN AUTO A ON (A.USUARIO_ID = U.ID_USUARIO)', []).then(res => {
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO)', []).then(res => {
 
       let items: Rutas[] = [];
 
