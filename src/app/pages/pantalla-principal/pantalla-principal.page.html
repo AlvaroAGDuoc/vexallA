@@ -15,26 +15,38 @@
 
 <ion-tabs>
 
-<div class="margen">
+<div class="margen" *ngIf="usuario.rol_id === 1">
 
-  <ion-button *ngIf="usuario.rol_id === 1" class="boton" size="default" [routerLink]="['/lista-vehiculo']" expand="block">Historial de viajes</ion-button>
+  <ion-button  class="boton" size="default" [routerLink]="['/lista-vehiculo']" expand="block">Historial de viajes</ion-button>
     
   <ion-button  class="boton" size="default" expand="block" [routerLink]="['/crear-ruta']">Ver mis vehiculos</ion-button>
 
-  <ion-button class="boton" size="default" expand="block" [routerLink]="['/viaje']">Preguntas frecuentes</ion-button>
+  <ion-button class="boton" size="default" expand="block" [routerLink]="['/preguntas-frecuentes']">Preguntas frecuentes</ion-button>
 
-  <ion-button class="boton"  [routerLink]="['/']"  size="default" expand="block">Cerrar sesión</ion-button>
+  <ion-button class="boton"  [routerLink]="['/login']"  size="default" expand="block">Cerrar sesión</ion-button>
+
+
+</div>
+
+<div class="margen" *ngIf="usuario.rol_id === 2">
+  
+
+  <ion-button class="boton" size="default" expand="block" [routerLink]="['/preguntas-frecuentes']">Preguntas frecuentes</ion-button>
+
+  <ion-button class="boton"  [routerLink]="['/login']"  size="default" expand="block">Cerrar sesión</ion-button>
+
+
 </div>
 
   <ion-tab-bar slot="bottom">
 
-    <ion-tab-button [routerLink]="['/crear-ruta']" >
+    <ion-tab-button *ngIf="usuario.rol_id === 1" [routerLink]="['/crear-ruta']" >
       <ion-icon name="car-sport-outline"></ion-icon>
-      <ion-label>Ruta</ion-label>
+      <ion-label>Crear ruta</ion-label>
     </ion-tab-button>
 
 
-    <ion-tab-button  [routerLink]="['/viaje']">
+    <ion-tab-button  *ngIf="usuario.rol_id === 2" [routerLink]="['/viaje']">
       <ion-icon name="car-sport-outline"></ion-icon>
       <ion-label>Viajar</ion-label>
     </ion-tab-button>

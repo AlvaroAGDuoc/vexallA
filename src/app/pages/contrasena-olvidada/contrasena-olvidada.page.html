@@ -18,22 +18,48 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p>Ingresa tu CORREO y te enviaremos un codigo a la dirección que ingresaste.</p>
-      <form [formGroup]="formGroup">
+      <p>Ingresa un nombre de usuario correcto y luego crea una nueva clave</p>
+      <form [formGroup]="formGroup" (ngSubmit)="validarUsuario()">
         <mat-form-field appearance="outline">
-          <mat-label class="blanco">Email</mat-label>
-          <input type="email" matInput formControlName="email" required>
+          <mat-label class="blanco">Nombre</mat-label>
+          <input type="text" id="nombre" matInput formControlName="nombre" required>
         </mat-form-field>
-        <p class="msjError" *ngIf="(formGroup.get('email').hasError('required') && formGroup.get('email').touched )">
+        <p class="msjError" *ngIf="(formGroup.get('nombre').hasError('required') && formGroup.get('nombre').touched )">
           Ingrese datos</p>
-        <p class="msjError" *ngIf="(formGroup.get('email').hasError('email') && formGroup.get('email').touched )">
-          Ingrese un email valido</p>
 
-
-
-        <ion-button expand="block" (click)="cargando() ">Enviar codigo</ion-button>
+        <ion-button expand="block" id="aceptar" type="sumbit">Aceptar</ion-button>      
       </form>
-      <div *ngIf="loading">
+
+
+
+      <form [formGroup]="form2" id="form2" (ngSubmit)="cambiarClave()" hidden>
+      <mat-form-field appearance="outline">
+        <mat-label class="blanco">Nueva clave</mat-label>
+        <input type="password" id="clave1" matInput formControlName="clave" required>
+      </mat-form-field>
+      <!-- <p class="msjError" *ngIf="(formGroup.get('clave1').hasError('required') && formGroup.get('clave1').touched )">
+        Ingrese datos
+      </p> -->
+      <!-- <p class="msjError" *ngIf="(formGroup.get('clave').hasError('minlength'))">La clave debe tener minimo 6
+        caracteres </p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('mayus')">
+        Debe contener 1 mayuscula como minimo</p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('minus')">
+        Debe contener 1 minuscula como minimo</p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('numero')">
+        Debe contener 1 numero como minimo</p> -->
+
+      <mat-form-field appearance="outline">
+        <mat-label class="blanco">Repetir clave</mat-label>
+        <input type="password" id="clave2" matInput formControlName="confirmarClave" required>
+      </mat-form-field>
+      <!-- <p class="msjError" *ngIf="revisarSiSonIguales()">Las claves no coinciden</p> -->
+
+      <ion-button expand="block" type="sumbit">Cambiar clave</ion-button>    
+
+      </form>
+
+      <!-- <div *ngIf="loading">
         <div class="progress__loading">
           <div>
             <mat-progress-bar [value]="value" mode="indeterminate">
@@ -41,7 +67,7 @@
           </div>
         </div>
 
-      </div>
+      </div> -->
 
 
     </ion-card-content>

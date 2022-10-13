@@ -282,6 +282,23 @@ export class BdservicioService {
     })
   }
 
+  validarNombre(nombre) {
+    //retorno la ejecución del select
+    return this.database.executeSql('SELECT COUNT(NOMBRE_USUARIO) AS CONTENOM FROM USUARIO WHERE NOMBRE_USUARIO = ?', [nombre]).then(res => {
+      if (res.rows.item(0).CONTENOM === 0) {
+        return true;
+      }
+      return false;
+    })
+  }
+
+  editarClaveNombre(nombre, clave) {
+    let data = [clave, nombre]
+    return this.database.executeSql('UPDATE USUARIO SET CLAVE = ? WHERE NOMBRE_USUARIO = ? ', data).then((res) => {
+      this.buscarUsuarios()
+    })
+  }
+
 
   editarClaveUsuario(id_usuario, clave) {
     let data = [clave, id_usuario]

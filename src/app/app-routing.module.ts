@@ -61,7 +61,11 @@ const routes: Routes = [
   {
     path: 'loading',
     loadChildren: () => import('./pages/loading/loading.module').then( m => m.LoadingPageModule)
+  },  {
+    path: 'ruta-actual',
+    loadChildren: () => import('./pages/ruta-actual/ruta-actual.module').then( m => m.RutaActualPageModule)
   },
+
 ];
 
 @NgModule({

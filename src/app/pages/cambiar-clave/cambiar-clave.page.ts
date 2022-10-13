@@ -41,18 +41,21 @@ export class CambiarClavePage implements OnInit {
   validarClaveActual() {
     let clave =  (document.getElementById('claveActual') as HTMLInputElement).value;
     let claveNueva = (document.getElementById('claveNueva') as HTMLInputElement).value;
-    this.servicioBD.validarClave(clave).then((res) => {
-      if (res) {
-        this.servicioBD.presentToast('NO')
-      } else {
-        this.usuario.clave = claveNueva
-        this.storage.set('usuario', this.usuario)
-        this.servicioBD.editarClaveUsuario(this.usuario.id_usuario, claveNueva)
-        this.servicioBD.presentToast('Clave cambiada con exito')
-        this.router.navigate(['/perfil'])
+    if(this.formGroup.valid){
+      this.servicioBD.validarClave(clave).then((res) => {
+        if (res) {
+          this.servicioBD.presentToast('NO')
+        } else {
+          this.usuario.clave = claveNueva
+          this.storage.set('usuario', this.usuario)
+          this.servicioBD.editarClaveUsuario(this.usuario.id_usuario, claveNueva)
+          this.servicioBD.presentToast('Clave cambiada con exito')
+          this.router.navigate(['/perfil'])
+        }
       }
+    )
     }
-  )}
+    }
 
 
   ngOnInit() {
