@@ -20,35 +20,10 @@
       <form [formGroup]="formGroup" (ngSubmit)="pasarDatos('/perfil')">
 
         <mat-form-field appearance="outline">
-          <mat-label class="blanco">Nombre Completo</mat-label>
-          <input type="text" matInput [(ngModel)]="usuario.nombre" formControlName="nombre" readonly>
+          <mat-label class="blanco">Nombre usuario</mat-label>
+          <input type="text" matInput  formControlName="nombre" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label class="blanco">Email</mat-label>
-          <input type="email" matInput [(ngModel)]="usuario.email" formControlName="email">
-        </mat-form-field>
-        <p class="msjError" *ngIf="(formGroup.get('email').hasError('required') && formGroup.get('email').touched )">
-          Ingrese datos</p>
-        <p class="msjError" *ngIf="(formGroup.get('email').hasError('email') && formGroup.get('email').touched )">
-          Ingrese un email valido</p>
-
-        <mat-form-field appearance="outline">
-          <mat-label class="blanco">Telefono</mat-label>
-          <input type="number" matInput [(ngModel)]="usuario.telefono" formControlName="telefono" required>
-        </mat-form-field>
-        <p class="msjError"
-          *ngIf="(formGroup.get('telefono').hasError('required') && formGroup.get('telefono').touched )"> Ingrese datos
-        </p>
-        <p class="msjError" *ngIf="formGroup.get('telefono').touched && formGroup.get('telefono').hasError('num')">
-          El telefono solo contiene 9 digitos</p>
-
-        
-        <ion-item class="select">
-          <ion-select formControlName="sede" [(ngModel)]="usuario.sede" placeholder="Sede">
-            <ion-select-option *ngFor="let sede of sedes" [value]="sede.value">{{sede.viewValue}}</ion-select-option>
-          </ion-select>
-        </ion-item>
 
         <ion-button expand="block" type="submit">Modificar</ion-button>
 
@@ -56,7 +31,7 @@
       <div style="text-align: center">
       </div>
 
-      <ion-button expand="block" (click)="pasarDatos('/cambiar-clave')">Cambiar clave</ion-button>
+      <ion-button expand="block" [routerLink]="['/cambiar-clave']">Cambiar clave</ion-button>
     </ion-card-content>
   </ion-card>
 

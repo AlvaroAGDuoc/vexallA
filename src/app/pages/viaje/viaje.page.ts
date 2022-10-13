@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
-
+import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,16 +30,37 @@ export class ViajePage implements OnInit {
     status: ''
   }]
 
-  constructor(private servicioBD: BdservicioService) {
+  rutaBuscada: any;
+
+
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router) {
   }
 
+
+
+  buscarxRuta($event) {
+    const texto = $event.target.value;
+    this.rutaBuscada = this.arregloRutas;
+    if(texto && texto.trim() != '') {
+      this.rutaBuscada = this.rutaBuscada.filter((ruta: any) => {
+        return (ruta.origen.toLowerCase().indexOf(texto.toLowerCase()) > -1);
+      })
+    }
+  }
+
+  verRecorrido(id_viaje) {
+    this.servicioBD.buscarRuta(id_viaje).then((res)=> {
+      this.storage.set('rutaSeleccionada', res)
+      this.router.navigate(['ver-recorrido'])
+    })
+  }
 
   ngOnInit() {
     this.servicioBD.dbState().subscribe(res => {
       if (res) {
         this.servicioBD.fetchRutas().subscribe(item => {
           this.arregloRutas = item;
-          console.log(this.arregloRutas)
+          this.rutaBuscada = this.arregloRutas;
         })
       }
     })

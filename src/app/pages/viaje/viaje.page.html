@@ -5,12 +5,20 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar ruta por origen" (ionChange)="buscarxRuta($event)" showCancelButton="focus" animated></ion-searchbar>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content class="fondo">
 
+
+
   <h5 class="titulo">Rutas disponibles</h5>
-    <ion-card *ngFor="let r of arregloRutas">
+  
+    <ion-card *ngFor="let r of rutaBuscada">
       <ion-card-header>
         <h3>{{r.nombre_usuario}}</h3>
         <hr class="hr">
@@ -25,7 +33,7 @@
         <p>Origen: {{r.origen}}</p>
         <p>Destino: {{r.destino}}</p>
         <p>Asientos disponibles: {{r.asientos_dispo}}</p>
-        <ion-button (click)="verRecorrido(i)" expand="block">Ver recorrido</ion-button>
+        <ion-button (click)="verRecorrido(r.viaje_id)" expand="block">Ver recorrido</ion-button>
       </ion-card-content>
     </ion-card>
 </ion-content>

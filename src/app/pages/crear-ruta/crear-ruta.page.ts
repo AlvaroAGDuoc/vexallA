@@ -18,13 +18,11 @@ export class CrearRutaPage implements OnInit {
   @ViewChild('rutaInicio') rutaInicio!: ElementRef;
   @ViewChild('rutaFin') rutaFin!: ElementRef;
 
-
-
   distancia;
 
 
   formMapas!: FormGroup;
-  
+
   usuario: any = {};
 
   arregloVehiculo: any = [
@@ -42,7 +40,7 @@ export class CrearRutaPage implements OnInit {
   patenteSeleccionada = '';
 
 
-  constructor(private router: Router,private bd: BdservicioService,private storage: Storage, private geo: GeolocationService) {
+  constructor(private router: Router, private bd: BdservicioService, private storage: Storage, private geo: GeolocationService) {
 
 
     this.formMapas = new FormGroup({
@@ -60,7 +58,7 @@ export class CrearRutaPage implements OnInit {
   }
 
   ngOnInit() {
-  this.storage.get('usuario').then((val) => {
+    this.storage.get('usuario').then((val) => {
       this.usuario = val
       this.bd.dbState().subscribe(res => {
         if (res) {
@@ -72,10 +70,9 @@ export class CrearRutaPage implements OnInit {
     })
   }
 
-  ngAfterViewInit(): void {
-    this.geo.inicioMapa( this.divMap, this.rutaInicio, this.rutaFin)
-
-
+  async ngAfterViewInit() {
+    await this.geo.inicioMapa(this.divMap)
+    await this.geo.cargarAutoComplete(this.rutaInicio, this.rutaFin)
   }
 
   calcularRuta() {
@@ -84,99 +81,25 @@ export class CrearRutaPage implements OnInit {
     this.geo.calcularRuta(ruta1, ruta2, this.distancia)
   }
 
-  // calcularRuta() {
 
-  //     const directionService = new google.maps.DirectionsService();
-  //     const directionRender = new google.maps.DirectionsRenderer();
-  //     let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
-  //     let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+  crearRuta() {
+    if (this.formMapas.valid) {
+      let fecha = new Date()
+      let hora_actual = fecha.toLocaleTimeString()
+      let fecha_viaje = fecha.toLocaleDateString()
+      let asientos = (document.getElementById('asientos') as HTMLInputElement).value;
+      let precio = (document.getElementById('precio') as HTMLInputElement).value;
+      let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
+      let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
+      let status = 1;
+      this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2)
 
-  //     directionRender.setMap(this.mapa);
 
-  //     directionService.route({
-  //       origin: ruta1,
-  //       destination: ruta2,
-  //       travelMode: google.maps.TravelMode.DRIVING
-  //     }, resultado => {
-  //       console.log(resultado);
-  //       directionRender.setDirections(resultado)
-
-  //       this.distancia = resultado.routes[0].legs[0].distance.text;
-
-  //      (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + this.distancia
-  //     })
-  //   } 
-
-    crearRuta() {
-      if(this.formMapas.valid) {
-        let fecha = new Date()
-        let hora_actual = fecha.toLocaleTimeString()
-        let fecha_viaje = fecha.toLocaleDateString()
-        let asientos = (document.getElementById('asientos') as HTMLInputElement).value;
-        let precio = (document.getElementById('precio') as HTMLInputElement).value;
-        let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
-        let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
-        let status = 1;
-        this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2 )
-
-        console.log('HORA: ', hora_actual , ' FECHA: ', fecha_viaje)
-
-        this.router.navigate(['/pantalla-principal'])
-      }else {
-        this.bd.presentToast2("Todos los campos deben ser llenados")
-      }
+      this.router.navigate(['/pantalla-principal'])
+    } else {
+      this.bd.presentToast2("Todos los campos deben ser llenados")
     }
-  
-  // private cargarAutoComplete() {
-  //   const autocomplete = new google.maps.places.Autocomplete((this.rutaInicio.nativeElement), {
-  //     componentRestrictions: {
-  //       country: ["CL"]
-  //     },
-  //     fields: ["address_components", "geometry"],
-  //     types: ["establishment"]
-  //   })
+  }
 
-  //   google.maps.event.addListener(autocomplete, 'place_changed', () => {
-  //     const place: any = autocomplete.getPlace();
-  //     console.log('El place completo es: ', place)
-
-  //     this.mapa.setCenter(place.geometry.location);
-  //     const marker = new google.maps.Marker({
-  //       position: place.geometry.location
-  //     });
-  //     marker.setMap(this.mapa);
-  //   })
-
-  //   const autocomplete2 = new google.maps.places.Autocomplete((this.rutaFin.nativeElement), {
-  //     componentRestrictions: {
-  //       country: ["CL"]
-  //     },
-  //     fields: ["address_components", "geometry"],
-  //     types: ["address"],
-  //   })
-
-  //   google.maps.event.addListener(autocomplete2, 'place_changed', () => {
-  //     const place2: any = autocomplete2.getPlace();
-  //     console.log('El place completo es: ', place2)
-
-  //     this.mapa.setCenter(place2.geometry.location);
-  //     const marker = new google.maps.Marker({
-  //       position: place2.geometry.location
-  //     });
-  //     marker.setMap(this.mapa);
-  //   })
-
-
-  // }
-
-  // cargarMapa(position: any): any {
-  //   const opciones = {
-  //     center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-  //     zoom: 17,
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP
-  //   }
-
-  //   this.mapa = new google.maps.Map((this.divMap.nativeElement), opciones)
-  // }
 
 }

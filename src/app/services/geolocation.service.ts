@@ -12,15 +12,11 @@ export class GeolocationService {
   constructor(private geolocation: Geolocation) {  }
 
 
-  inicioMapa(divMap, rutaInicio, rutaFin) {
+  inicioMapa(divMap) {
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp ', resp)
-  
-      this.cargarMapa(resp, divMap)
-      this.cargarAutoComplete(rutaInicio, rutaFin,)
-  
+      this.cargarMapa(resp, divMap) 
     }).catch((error) => {
-      console.log('Error getting location', error);
+      console.log('Error obteniendo la localización', error);
     });
   
   }
@@ -36,12 +32,10 @@ export class GeolocationService {
     this.mapa = new google.maps.Map((divMap.nativeElement), opciones)
   }
 
-  calcularRuta(ruta1, ruta2, distancia) {
 
+  calcularRuta(ruta1: string, ruta2: string, distancia) {
     const directionService = new google.maps.DirectionsService();
     const directionRender = new google.maps.DirectionsRenderer();
-    ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
-    ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
 
     directionRender.setMap(this.mapa);
 

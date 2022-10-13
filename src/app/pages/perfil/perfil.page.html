@@ -9,12 +9,13 @@
 
 <ion-content class="fondo">
   <ion-card>
-    <div (click)="tomarFoto()" *ngIf="foto === '' ">
-      <img src="assets/711769.png" alt="">
+
+    <div *ngIf="this.usuario.foto === '' "  (click)="tomarFoto()" >
+      <img src="assets/711769.png">
     </div>
 
-    <div (click)="tomarFoto()" *ngIf="foto !== '' ">
-      <img [src]="foto">
+    <div *ngIf="this.usuario.foto !== '' " (click)="tomarFoto()" >
+      <img [src]="this.usuario.foto">
     </div>
 
     <ion-card-header>
@@ -25,7 +26,7 @@
 
     <ion-card-content>
       <p>Nombre: {{this.usuario.nombre_usuario}}</p>
-      <ion-button class="boton"  size="default" expand="block">Modificar perfil</ion-button>
+      <ion-button class="boton" [routerLink]="['/modificar-perfil']" size="default" expand="block">Modificar perfil</ion-button>
       
       <ion-button class="boton" size="default" expand="block" [routerLink]="['/lista-vehiculo']">Ver mis vehiculos</ion-button>
       <ion-button class="boton" size="default" expand="block" [routerLink]="['/registro-vehiculo']">Agregar vehiculo</ion-button>

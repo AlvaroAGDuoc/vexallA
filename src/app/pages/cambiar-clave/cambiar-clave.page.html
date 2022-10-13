@@ -17,11 +17,11 @@
     <ion-card-content>
 
 
-      <form [formGroup]="formGroup" (ngSubmit)="pasarDatos()">
+      <form [formGroup]="formGroup" (ngSubmit)="validarClaveActual()">
 
         <mat-form-field appearance="outline">
           <mat-label class="blanco">Clave actual </mat-label>
-          <input type="password" matInput formControlName="claveActual" required>
+          <input type="password" id="claveActual" matInput formControlName="claveActual" required>
         </mat-form-field>
         <p class="msjError" *ngIf="(formGroup.get('claveActual').hasError('required') && formGroup.get('claveActual').touched )">
           Ingrese datos
@@ -29,7 +29,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label class="blanco">Clave</mat-label>
-          <input type="password" matInput [(ngModel)]="usuario.clave" formControlName="clave" required>
+          <input type="password" id="claveNueva" matInput  formControlName="clave" required>
         </mat-form-field>
         <p class="msjError" *ngIf="(formGroup.get('clave').hasError('required') && formGroup.get('clave').touched )">
           Ingrese datos

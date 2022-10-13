@@ -10,33 +10,50 @@
 <ion-content >
 
   <h1>Crear ruta</h1>
-  <form [formGroup]="formMapas"  (ngSubmit)="crearRuta()">
-    <select  formControlName="vehiculos" (change)="vehiculoSeleccionado($event)">
-      <option value="1">Selecciona un vehiculo</option>
-      <option *ngFor="let v of arregloVehiculo" [value]="v.patente">
-         {{v.modelo}}, Patente: {{v.patente}}
-      </option>
-    </select>
+  <form [formGroup]="formMapas"  (ngSubmit)="crearRuta()" class="form">
+
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Selecciona un vehiculo</mat-label>
+      <select matNativeControl formControlName="vehiculos" (change)="vehiculoSeleccionado($event)">
+        <option *ngFor="let v of arregloVehiculo" [value]="v.patente">
+          Modelo: {{v.modelo}}, Patente: {{v.patente}}
+        </option>
+      </select>
+    </mat-form-field>
 
     <h2>{{this.patenteSeleccionada}}</h2>
-   
-      <input type="text" #rutaInicio id="rutaInicio" formControlName="ruta1">
 
-      <input type="text" #rutaFin id="rutaFin" formControlName="ruta2">
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label class="label">Origen ruta</mat-label>
+        <input matInput type="text" #rutaInicio id="rutaInicio" formControlName="ruta1">
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label class="label">Destino ruta</mat-label>
+        <input matInput type="text" #rutaFin id="rutaFin" formControlName="ruta2">
+      </mat-form-field>
 
       <h2 id="distancia"></h2>
 
-    
 
-      <input type="number" id="precio" formControlName="precio">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label class="label">Precio</mat-label>
+        <input matInput type="number" id="precio" formControlName="precio">
+      </mat-form-field>
 
-      <input type="number" id="asientos" formControlName="asientos">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label class="label">Asientos disponibles</mat-label>
+        <input matInput type="number" id="asientos" formControlName="asientos">
+      </mat-form-field>
 
-    <button type="submit">Crear ruta</button>
+
+    <ion-button class="boton" size="default" expand="block" type="submit">Crear ruta</ion-button>
 
     
   </form>
-  <button (click)="calcularRuta()">Calcular ruta</button>
+  <ion-button class="boton" size="default" expand="block" (click)="calcularRuta()">Calcular ruta</ion-button>
+  <!-- <button (click)="calcularRuta()">Calcular ruta</button> -->
   
   <div class="mapa" #divMap></div>
 </ion-content>

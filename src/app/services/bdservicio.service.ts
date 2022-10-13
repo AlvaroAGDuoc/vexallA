@@ -16,15 +16,15 @@ export class BdservicioService {
   public database: SQLiteObject;
   //variable para la sentencia de creación de las tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS ROL(id_rol INTEGER PRIMARY KEY, nombre_rol VARCHAR(10));";
-  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), rol_id INTEGER,  foreign key(rol_id) references ROL(id_rol));";
+  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), rol_id INTEGER, foto BLOB,  foreign key(rol_id) references ROL(id_rol));";
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
   tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
 
   tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente));";
 
   tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, PRIMARY KEY(viaje_id, usuario_id_usuario)  foreign key(usuario_id_usuario) references USUARIO(id_usuario) , foreign key(viaje_id) references VIAJE(id_viaje) ON DELETE CASCADE);";
- 
-  
+
+
   //variable para la sentencia de registros por defecto en la tabla
   registroRol: string = "INSERT or IGNORE INTO ROL(id_rol,nombre_rol) VALUES (1,'Conductor');";
   registroRol2: string = "INSERT or IGNORE INTO ROL(id_rol,nombre_rol) VALUES (2,'Pasajero');";
@@ -108,7 +108,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'baseded.db',
+        name: 'basededasdasdasd.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -206,7 +206,6 @@ export class BdservicioService {
     })
   }
 
-
   buscarUsuarios() {
     //retorno la ejecución del select
     return this.database.executeSql('SELECT * FROM USUARIO', []).then(res => {
@@ -219,17 +218,16 @@ export class BdservicioService {
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             clave: res.rows.item(i).clave,
-            rol_id: res.rows.item(i).rol_id
+            rol_id: res.rows.item(i).rol_id,
+            foto: res.rows.item(i).foto
           })
         }
 
       }
-      //actualizamos el observable de las marcas
+      //actualizamos el observable de los usuarios
       this.listaUsuarios.next(items);
     })
   }
-
-
 
   validarUsuario(nombre, clave) {
     //retorno la ejecución del select
@@ -248,6 +246,7 @@ export class BdservicioService {
       nombre_usuario: '',
       clave: '',
       rol_id: '',
+      foto: Blob
     }
 
     return this.database.executeSql('SELECT * FROM USUARIO WHERE nombre_usuario = ?', [nombre_usuario]).then((res) => {
@@ -258,19 +257,38 @@ export class BdservicioService {
             nombre_usuario: res.rows.item(i).nombre_usuario,
             clave: res.rows.item(i).clave,
             rol_id: res.rows.item(i).rol_id,
+            foto: res.rows.item(i).foto
           }
         }
       }
-
-      let id = this.database.executeSql('SELECT MAX(ID_USUARIO) AS ID FROM USUARIO', []).then(res => console.log("RES MAX", res.rows.item(0).ID))
-
-      console.log('ULTIMA ID: ', id)
-      console.log('nombre USUARIO', usuario.nombre_usuario)
       return usuario;
     })
   }
 
+  editarFotoUsuario(id_usuario, foto) {
+    let data = [foto, id_usuario]
+    return this.database.executeSql('UPDATE USUARIO SET FOTO = ? WHERE ID_USUARIO = ? ', data).then((res) => {
+      this.buscarUsuarios()
+    })
+  }
 
+  validarClave(clave) {
+    //retorno la ejecución del select
+    return this.database.executeSql('SELECT COUNT(CLAVE) AS CONTECLAVE FROM USUARIO WHERE CLAVE = ?', [clave]).then(res => {
+      if (res.rows.item(0).CONTECLAVE === 0) {
+        return true;
+      }
+      return false;
+    })
+  }
+
+
+  editarClaveUsuario(id_usuario, clave) {
+    let data = [clave, id_usuario]
+    return this.database.executeSql('UPDATE USUARIO SET CLAVE = ? WHERE ID_USUARIO = ? ', data).then((res) => {
+      this.buscarUsuarios()
+    })
+  }
 
   agregarVehiculo(patente, color, modelo, annio, marca_id, usuario_id) {
     let data = [patente, color, modelo, annio, marca_id, usuario_id];
@@ -279,8 +297,6 @@ export class BdservicioService {
     });
   }
 
-
-
   eliminarVehiculo(patentev) {
     return this.database.executeSql('DELETE FROM AUTO WHERE patente = ?', [patentev]).then(a => {
       this.buscarVehiculos();
@@ -288,31 +304,28 @@ export class BdservicioService {
 
   }
 
-  agregarUsuario(id_usuario, nombre_usuario, clave, rol_id) {
-    let data = [id_usuario, nombre_usuario, clave, rol_id];
-    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, rol_id) VALUES (?,?,?,?)', data).then(res => {
+  agregarUsuario(id_usuario, nombre_usuario, clave, rol_id, foto: Blob) {
+    let data = [id_usuario, nombre_usuario, clave, rol_id, foto];
+    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, rol_id, foto) VALUES (?,?,?,?, ?)', data).then(res => {
       this.buscarUsuarios()
     })
   }
 
-
-
- async agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto,id_usuario, status, origen, destino ) {
-    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino  ];
+  async agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, id_usuario, status, origen, destino) {
+    let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino];
     let data2 = [id_usuario, status]
     let id_viaje
 
-    console.log('DATA2 ANTIGUO', data2)
     return await this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino) VALUES (?,?,?,?,?,?,?)', data),
-    await this.database.executeSql('SELECT MAX(ID_VIAJE) AS ID FROM VIAJE', []).then(res => {
-      id_viaje = res.rows.item(0).ID
-      let data2A = data2.unshift(id_viaje)
-      console.log('DATA2 ACTUALIZADO ', data2)
-      this.database.executeSql('INSERT INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES (?,?,?)', data2).then(res => {
-        this.buscarRutas();
+      await this.database.executeSql('SELECT MAX(ID_VIAJE) AS ID FROM VIAJE', []).then(res => {
+        id_viaje = res.rows.item(0).ID
+        let data2A = data2.unshift(id_viaje)
+
+        this.database.executeSql('INSERT INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES (?,?,?)', data2).then(res => {
+          this.buscarRutas();
+        })
       })
-    })  
- }
+  }
 
   buscarRutas() {
     return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO)', []).then(res => {
@@ -335,13 +348,62 @@ export class BdservicioService {
             hora_salida: res.rows.item(i).hora_salida,
             asientos_dispo: res.rows.item(i).asientos_dispo,
             monto: res.rows.item(i).monto,
+            
             origen: res.rows.item(i).origen,
-            destino: res.rows.item(i).destino,          
+            destino: res.rows.item(i).destino,
             status: res.rows.item(i).status
           })
         }
       }
       this.listaRutas.next(items);
+    })
+  }
+
+  buscarRuta(id_viaje) {
+    let rutaSeleccionada = {
+      usuario_id: '',
+      viaje_id: '',
+      nombre_usuario: '',
+
+      color: '',
+      modelo: '',
+      patente: '',
+
+      fecha_viaje: '',
+      hora_salida: '',
+      asientos_dispo: '',
+      monto: '',
+      origen: '',
+      destino: '',
+      status: ''
+    }
+
+
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO) WHERE(V.ID_VIAJE = ?)', [id_viaje]).then(res => {
+
+
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          rutaSeleccionada = {
+            usuario_id: res.rows.item(i).id_usuario,
+            viaje_id: res.rows.item(i).id_viaje,
+            nombre_usuario: res.rows.item(i).nombre_usuario,
+
+            color: res.rows.item(i).color,
+            modelo: res.rows.item(i).modelo,
+            patente: res.rows.item(i).patente,
+
+            fecha_viaje: res.rows.item(i).fecha_viaje,
+            hora_salida: res.rows.item(i).hora_salida,
+            asientos_dispo: res.rows.item(i).asientos_dispo,
+            monto: res.rows.item(i).monto,
+            origen: res.rows.item(i).origen,
+            destino: res.rows.item(i).destino,
+            status: res.rows.item(i).status,
+          }
+        }
+      }
+      return rutaSeleccionada;
     })
   }
 

@@ -4,4 +4,5 @@ export class UsuariosService {
   nombre_usuario: string;
   clave: string;
   rol_id: number;
+  foto: Blob;
 }

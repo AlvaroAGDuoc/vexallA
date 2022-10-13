@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
+import { BdservicioService } from 'src/app/services/bdservicio.service';
+import { GeolocationService } from 'src/app/services/geolocation.service';
 
 @Component({
   selector: 'app-ver-recorrido',
@@ -9,16 +10,29 @@ import { ToastController } from '@ionic/angular';
 })
 export class VerRecorridoPage implements OnInit {
 
+  @ViewChild('divMap') divMap!: ElementRef;
 
-  
+  distancia;
 
-  constructor() {
-   }
+  rutaSeleccionada: any = {}
 
-
-    
+  constructor(private storage: Storage, private geo: GeolocationService) {
+  }
 
   ngOnInit() {
+    this.storage.get('rutaSeleccionada').then((val) => {
+      this.rutaSeleccionada = val
+      console.log("ORIGEN: ", typeof this.rutaSeleccionada.origen)
+    })
+
+  }
+
+  obtenerDireccion() {
+    this.geo.calcularRuta(this.rutaSeleccionada.origen , this.rutaSeleccionada.destino , this.distancia)
+  }
+
+   ngAfterViewInit():void {
+     this.geo.inicioMapa(this.divMap)
   }
 
 }

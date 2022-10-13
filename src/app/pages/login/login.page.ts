@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
 
   usuarios : any;
 
-  locations = [];
+  foto = new Blob;
 
   constructor( private servicioBD: BdservicioService, private storage: Storage,  private api: ApiService, private loading: LoadingPage) {
 
@@ -47,9 +47,7 @@ export class LoginPage implements OnInit {
     this.api.getUsers().subscribe((res) => {
       this.usuarios = res;
       for(var i = 0; i < this.usuarios.length; i++){
-        this.servicioBD.agregarUsuario(this.usuarios[i].id, this.usuarios[i].nombre, this.usuarios[i].clave, this.usuarios[i].id_rol)
-        
-
+        this.servicioBD.agregarUsuario(this.usuarios[i].id, this.usuarios[i].nombre, this.usuarios[i].clave, this.usuarios[i].id_rol, this.foto)
       }
     }, (error) => {
       console.log('ERROR USERS', error);
