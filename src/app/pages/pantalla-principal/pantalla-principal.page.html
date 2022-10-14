@@ -25,7 +25,7 @@
 
   <ion-button class="boton"  [routerLink]="['/login']"  size="default" expand="block">Cerrar sesión</ion-button>
 
-
+  
 </div>
 
 <div class="margen" *ngIf="usuario.rol_id === 2">
@@ -37,16 +37,26 @@
 
 
 </div>
+<ion-button class="boton"  (click)="rutaActual()"  size="default" expand="block">Ruta actual</ion-button>
 
   <ion-tab-bar slot="bottom">
+    <ion-tab-button *ngIf="usuario.rol_id === 1 && ruta.viaje_id != ''" [routerLink]="['/crear-ruta']" >
+      <ion-icon name="car-sport-outline"></ion-icon>
+      <ion-label>Ver ruta</ion-label>
+    </ion-tab-button>
 
-    <ion-tab-button *ngIf="usuario.rol_id === 1" [routerLink]="['/crear-ruta']" >
+    <ion-tab-button *ngIf="usuario.rol_id === 1 && ruta.viaje_id === '' " [routerLink]="['/crear-ruta']" >
       <ion-icon name="car-sport-outline"></ion-icon>
       <ion-label>Crear ruta</ion-label>
     </ion-tab-button>
 
 
-    <ion-tab-button  *ngIf="usuario.rol_id === 2" [routerLink]="['/viaje']">
+    <ion-tab-button  *ngIf="usuario.rol_id === 2 && ruta.viaje_id != '' " [routerLink]="['/viaje']">
+      <ion-icon name="car-sport-outline"></ion-icon>
+      <ion-label>Ver viaje</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button  *ngIf="usuario.rol_id === 2 && ruta.viaje_id === ''" [routerLink]="['/viaje']">
       <ion-icon name="car-sport-outline"></ion-icon>
       <ion-label>Viajar</ion-label>
     </ion-tab-button>

@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { GeolocationService } from 'src/app/services/geolocation.service';
@@ -16,15 +17,21 @@ export class VerRecorridoPage implements OnInit {
 
   rutaSeleccionada: any = {}
 
-  constructor(private storage: Storage, private geo: GeolocationService) {
+  usuario: any = {}
+
+  constructor(private storage: Storage, private geo: GeolocationService, private servicioBD: BdservicioService,  private router: Router) {
+    
   }
 
   ngOnInit() {
     this.storage.get('rutaSeleccionada').then((val) => {
       this.rutaSeleccionada = val
-      console.log("ORIGEN: ", typeof this.rutaSeleccionada.origen)
+      console.log('RUTA SELECCIONADA', JSON.stringify(this.rutaSeleccionada))
     })
 
+    this.storage.get('usuario').then((val) => {
+      this.usuario = val
+    })
   }
 
   obtenerDireccion() {
@@ -35,4 +42,10 @@ export class VerRecorridoPage implements OnInit {
      this.geo.inicioMapa(this.divMap)
   }
 
+  unirseRuta(id_viaje, id_usuario) {
+   this.servicioBD.unirseRuta(id_viaje, id_usuario)
+   this.servicioBD.presentToast('Te has unido a la ruta con exito')
+   this.router.navigate(['pantalla-principal'])
+  }
+  
 }

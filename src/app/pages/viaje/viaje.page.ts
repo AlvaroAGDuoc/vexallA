@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 
 @Component({
@@ -55,8 +56,10 @@ export class ViajePage implements OnInit {
     })
   }
 
-  ngOnInit() {
-    this.servicioBD.dbState().subscribe(res => {
+  async ngOnInit() {
+    await this.storage.defineDriver(CordovaSQLiteDriver);
+    await this.storage.create();
+    await this.servicioBD.dbState().subscribe(res => {
       if (res) {
         this.servicioBD.fetchRutas().subscribe(item => {
           this.arregloRutas = item;

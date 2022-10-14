@@ -38,13 +38,14 @@
           *ngIf="(formGroup.get('modelo').hasError('minlength') && formGroup.get('modelo').touched )">
           El modelo debe tener 2 caracteres como minimo</p>
 
-          <select (change)="marcaSeleccionada($event)">
-            <option value="default">----</option>
-            <option *ngFor="let m of arregloMarcas" [value]="m.id_marca">
-                {{m.nombre_marca}}
-            </option>
-          </select>
-
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Selecciona una marca</mat-label>
+            <select matNativeControl (change)="marcaSeleccionada($event)">
+              <option *ngFor="let m of arregloMarcas" [value]="m.id_marca">
+                  {{m.nombre_marca}}
+              </option>
+            </select>
+          </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label class="blanco">Año</mat-label>

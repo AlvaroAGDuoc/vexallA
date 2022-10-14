@@ -6,6 +6,7 @@ import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Router } from '@angular/router';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @Component({
   selector: 'app-crear-ruta',
@@ -57,8 +58,12 @@ export class CrearRutaPage implements OnInit {
     this.patenteSeleccionada = e.target.value
   }
 
-  ngOnInit() {
-    this.storage.get('usuario').then((val) => {
+ async  ngOnInit() {
+
+    await this.storage.defineDriver(CordovaSQLiteDriver);
+    await this.storage.create();
+    
+    await this.storage.get('usuario').then((val) => {
       this.usuario = val
       this.bd.dbState().subscribe(res => {
         if (res) {
@@ -92,9 +97,20 @@ export class CrearRutaPage implements OnInit {
       let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
       let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
       let status = 1;
+
+      let datosStorage = {
+        usuario_id: this.usuario.id_usuario,
+        nombre_usuario: this.usuario.nombre_usuario,
+        fecha_viaje: fecha,
+        hora_salida: hora_actual,
+        asientos_dispo: asientos,
+        monto: precio,
+        origen: ruta1,
+        destino: ruta2,
+        status: status
+      }
       this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2)
-
-
+      this.storage.set('rutaSeleccionada', datosStorage)
       this.router.navigate(['/pantalla-principal'])
     } else {
       this.bd.presentToast2("Todos los campos deben ser llenados")

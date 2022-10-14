@@ -22,7 +22,7 @@ export class BdservicioService {
 
   tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente));";
 
-  tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, PRIMARY KEY(viaje_id, usuario_id_usuario)  foreign key(usuario_id_usuario) references USUARIO(id_usuario) , foreign key(viaje_id) references VIAJE(id_viaje) ON DELETE CASCADE);";
+  tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, foreign key(usuario_id_usuario) references USUARIO(id_usuario), foreign key(viaje_id) references VIAJE(id_viaje), PRIMARY KEY(viaje_id, usuario_id_usuario));";
 
 
   //variable para la sentencia de registros por defecto en la tabla
@@ -108,7 +108,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'basededasdasdasd.db',
+        name: 'AASFD232423.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -323,18 +323,25 @@ export class BdservicioService {
 
   agregarUsuario(id_usuario, nombre_usuario, clave, rol_id, foto: Blob) {
     let data = [id_usuario, nombre_usuario, clave, rol_id, foto];
-    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, rol_id, foto) VALUES (?,?,?,?, ?)', data).then(res => {
+    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, rol_id, foto) VALUES (?,?,?,?,?)', data).then(res => {
       this.buscarUsuarios()
     })
   }
 
-  async agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, id_usuario, status, origen, destino) {
+  unirseRuta(id_usuario, id_viaje) {
+    let data = [id_usuario, id_viaje, 1];
+    return this.database.executeSql('INSERT OR IGNORE INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES(?, ?, ?)', data).then(res => {
+      this.buscarRutas()
+    })
+  }
+
+  agregarRuta(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, id_usuario, status, origen, destino) {
     let data = [fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino];
     let data2 = [id_usuario, status]
     let id_viaje
 
-    return await this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino) VALUES (?,?,?,?,?,?,?)', data),
-      await this.database.executeSql('SELECT MAX(ID_VIAJE) AS ID FROM VIAJE', []).then(res => {
+    return this.database.executeSql('INSERT INTO VIAJE(fecha_viaje, hora_salida, asientos_dispo, monto, patente_auto, origen, destino) VALUES (?,?,?,?,?,?,?)', data),
+      this.database.executeSql('SELECT MAX(ID_VIAJE) AS ID FROM VIAJE', []).then(res => {
         id_viaje = res.rows.item(0).ID
         let data2A = data2.unshift(id_viaje)
 
@@ -365,7 +372,7 @@ export class BdservicioService {
             hora_salida: res.rows.item(i).hora_salida,
             asientos_dispo: res.rows.item(i).asientos_dispo,
             monto: res.rows.item(i).monto,
-            
+
             origen: res.rows.item(i).origen,
             destino: res.rows.item(i).destino,
             status: res.rows.item(i).status
@@ -394,9 +401,7 @@ export class BdservicioService {
       destino: '',
       status: ''
     }
-
-
-    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO) WHERE(V.ID_VIAJE = ?)', [id_viaje]).then(res => {
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO) WHERE (DV.VIAJE_ID = ?)', [id_viaje]).then(res => {
 
 
       if (res.rows.length > 0) {
@@ -421,6 +426,56 @@ export class BdservicioService {
         }
       }
       return rutaSeleccionada;
+    })
+  }
+
+  buscarRutaActual(id_usuario) {
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) WHERE DV.USUARIO_ID_USUARIO = ? ', [id_usuario]).then(res => {
+      let rutaSeleccionada = {
+        usuario_id: '',
+        nombre_usuario: '',
+        viaje_id: '',
+        fecha_viaje: '',
+        hora_salida: '',
+        asientos_dispo: '',
+        monto: '',
+        origen: '',
+        destino: '',
+        status: ''
+      }
+
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          rutaSeleccionada = {
+            usuario_id: res.rows.item(i).id_usuario,
+            nombre_usuario: res.rows.item(i).nombre_usuario,
+            viaje_id: res.rows.item(i).viaje_id,
+            fecha_viaje: res.rows.item(i).fecha_viaje,
+            hora_salida: res.rows.item(i).hora_salida,
+            asientos_dispo: res.rows.item(i).asientos_dispo,
+            monto: res.rows.item(i).monto,
+            origen: res.rows.item(i).origen,
+            destino: res.rows.item(i).destino,
+            status: res.rows.item(i).status,
+          }
+        }
+      }
+      return rutaSeleccionada;
+    })
+  }
+
+  buscarPasajeros(id_viaje) {
+    return this.database.executeSql('SELECT * FROM DETALLE_VIAJE DV JOIN USUARIO U ON(DV.USUARIO_ID_USUARIO = U.ID_USUARIO) WHERE DV.VIAJE_ID = ? AND U.ROL_ID = 2 ', [id_viaje]).then((res) => {
+      let pasajeros = []
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          pasajeros.push({
+            nombre: res.rows.item(i).nombre_usuario,
+            id_usuario: res.rows.item(i).id_usuario
+          })
+        }
+      }
+      return pasajeros;
     })
   }
 

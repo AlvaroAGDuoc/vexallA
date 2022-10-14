@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver'
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { ApiService } from 'src/app/services/api.service';
 import { LoadingPage } from '../loading/loading.page';
 

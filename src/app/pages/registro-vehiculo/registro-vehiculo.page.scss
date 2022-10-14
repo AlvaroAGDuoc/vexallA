@@ -17,14 +17,15 @@ ion-button {
     --background-hover-opacity: 20%;
 }
 
-ion-card, ion-card-content {
+ion-card,
+ion-card-content {
     --background: #121212;
-  }
+}
 
-  
-  ion-item {
+
+ion-item {
     --background: ;
-  }
+}
 
 ion-card-subtitle,
 ion-card-title {
@@ -69,4 +70,17 @@ p {
     color: #e8bffd;
     text-align: center;
     margin-top: -10px;
+}
+
+.boton {
+    --color: #fffeff;
+    --background: #4f2e7f;
+    --background-hover-opacity: 20%;
+    margin-bottom: 2px;
+
+}
+
+.full-width {
+    width: 100%;
   }
+  
