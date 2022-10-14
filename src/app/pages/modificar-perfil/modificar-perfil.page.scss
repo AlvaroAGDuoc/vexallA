@@ -67,11 +67,15 @@ p {
 }
 
 .center {
-
   display: block;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: -60px;
+  
+}
+
+.full-width {
+  width: 85%;
 }
 
 .quitarEstilo {

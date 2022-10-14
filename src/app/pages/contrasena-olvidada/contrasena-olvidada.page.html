@@ -7,9 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-
-
-
 <ion-content class="fondo">
   <img class="center" src="../../../assets/asd.png" />
   <ion-card>
@@ -18,9 +15,9 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p>Ingresa un nombre de usuario correcto y luego crea una nueva clave</p>
+      <p>Ingresa tu nombre de usuario y luego crea una nueva clave</p>
       <form [formGroup]="formGroup" (ngSubmit)="validarUsuario()">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label class="blanco">Nombre</mat-label>
           <input type="text" id="nombre" matInput formControlName="nombre" required>
         </mat-form-field>
@@ -30,49 +27,7 @@
         <ion-button expand="block" id="aceptar" type="sumbit">Aceptar</ion-button>      
       </form>
 
-
-
-      <form [formGroup]="form2" id="form2" (ngSubmit)="cambiarClave()" hidden>
-      <mat-form-field appearance="outline">
-        <mat-label class="blanco">Nueva clave</mat-label>
-        <input type="password" id="clave1" matInput formControlName="clave" required>
-      </mat-form-field>
-      <!-- <p class="msjError" *ngIf="(formGroup.get('clave1').hasError('required') && formGroup.get('clave1').touched )">
-        Ingrese datos
-      </p> -->
-      <!-- <p class="msjError" *ngIf="(formGroup.get('clave').hasError('minlength'))">La clave debe tener minimo 6
-        caracteres </p>
-      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('mayus')">
-        Debe contener 1 mayuscula como minimo</p>
-      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('minus')">
-        Debe contener 1 minuscula como minimo</p>
-      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('numero')">
-        Debe contener 1 numero como minimo</p> -->
-
-      <mat-form-field appearance="outline">
-        <mat-label class="blanco">Repetir clave</mat-label>
-        <input type="password" id="clave2" matInput formControlName="confirmarClave" required>
-      </mat-form-field>
-      <!-- <p class="msjError" *ngIf="revisarSiSonIguales()">Las claves no coinciden</p> -->
-
-      <ion-button expand="block" type="sumbit">Cambiar clave</ion-button>    
-
-      </form>
-
-      <!-- <div *ngIf="loading">
-        <div class="progress__loading">
-          <div>
-            <mat-progress-bar [value]="value" mode="indeterminate">
-            </mat-progress-bar>
-          </div>
-        </div>
-
-      </div> -->
-
-
     </ion-card-content>
-
-
 
   </ion-card>
 </ion-content>

@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>rutaActualPasajero</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card >
+
+    <ion-card-header>
+      <h3>Ruta actual</h3>
+      <hr class="hr">
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Origen: {{this.ruta.origen}}</p>
+      <p>Destino: {{this.ruta.destino}}</p>
+      <p>Precio: {{this.ruta.monto | currency: 'CLP'}}</p>
+      
+  
+      <ion-button (click)="cancelarRuta()" botonRojo="boton" size="default" expand="block">Cancelar ruta</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

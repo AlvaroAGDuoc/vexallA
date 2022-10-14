@@ -12,8 +12,6 @@
 
   <h4 class="textoRosado">Tus vehiculos</h4>
 
-  <!-- <div *ngIf="this.tieneVehiculos()"> -->
-
   <ion-card *ngFor="let x of arregloVehiculo">
 
     <ion-card-header>
@@ -26,15 +24,13 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p >Marca: {{x.nombre_marca}} </p>
-      <p>Modelo: {{x.modelo}} </p>
-      <p>Patente: {{x.patente}} </p>
-      <p>Color: {{x.color}} </p>
-      <p>Año: {{x.annio}}</p>
-      <p>Año: {{x.usuario_id}}</p>
+      <p><a class="quitarEstilo">Marca: </a> {{x.nombre_marca}} </p>
+      <p><a class="quitarEstilo">Modelo: </a> {{x.modelo}} </p>
+      <p><a class="quitarEstilo">Patente: </a>{{x.patente}} </p>
+      <p><a class="quitarEstilo">Color: </a> {{x.color}} </p>
+      <p><a class="quitarEstilo">Año: </a> {{x.annio}}</p>
       <ion-button (click)="eliminar(x)" expand="block">Dar de baja</ion-button>
     </ion-card-content>
 
   </ion-card>
-<!-- </div> -->
 </ion-content>

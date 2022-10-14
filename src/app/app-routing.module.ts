@@ -65,6 +65,14 @@ const routes: Routes = [
     path: 'ruta-actual',
     loadChildren: () => import('./pages/ruta-actual/ruta-actual.module').then( m => m.RutaActualPageModule)
   },
+  {
+    path: 'paso2-olvidada',
+    loadChildren: () => import('./pages/paso2-olvidada/paso2-olvidada.module').then( m => m.Paso2OlvidadaPageModule)
+  },
+  {
+    path: 'ruta-actual-pasajero',
+    loadChildren: () => import('./pages/ruta-actual-pasajero/ruta-actual-pasajero.module').then( m => m.RutaActualPasajeroPageModule)
+  },
 
 ];
 

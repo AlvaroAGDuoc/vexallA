@@ -9,7 +9,6 @@ export const validarClaves: ValidatorFn = (control: FormGroup): ValidationErrors
   return clave.value === confirmarClave.value ? null : { 'noSonIguales': true };
 };
 
-
 @Injectable({
   providedIn: 'root'
 })

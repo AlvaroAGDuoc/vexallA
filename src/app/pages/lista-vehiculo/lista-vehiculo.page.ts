@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-vehiculo',
@@ -24,7 +25,7 @@ export class ListaVehiculoPage implements OnInit {
   usuario: any = {};
 
 
-  constructor(private servicioBD: BdservicioService, private storage: Storage) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router) {
 
     
   }
@@ -41,6 +42,10 @@ export class ListaVehiculoPage implements OnInit {
 
     this.storage.get('usuario').then((val) => {
       this.usuario = val
+      if(this.usuario.email === '' || this.usuario.nombre === '' || this.usuario.apellidos === '') {
+        this.servicioBD.presentAlert('ALERTA', 'Faltan datos de usuario', 'Seras redirigido a la pagina')
+        this.router.navigate(['modificar-perfil'])  
+      }
       this.servicioBD.dbState().subscribe(res => {
         if (res) {
           this.servicioBD.fetchVehiculos().subscribe(item => {

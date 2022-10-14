@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>paso2Olvidada</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo">
+
+  <img class="center" src="../../../assets/asd.png" />
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Recupera tu clave</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <form [formGroup]="formGroup" id="form2" (ngSubmit)="cambiarClave()">
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label class="blanco">Nueva clave</mat-label>
+        <input type="password" id="clave1" matInput formControlName="clave" required>
+      </mat-form-field>
+      <p class="msjError" *ngIf="(formGroup.get('clave').hasError('required') && formGroup.get('clave').touched )">
+        Ingrese datos
+      </p>
+      <p class="msjError" *ngIf="(formGroup.get('clave').hasError('minlength'))">La clave debe tener minimo 6
+        caracteres </p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('mayus')">
+        Debe contener 1 mayuscula como minimo</p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('minus')">
+        Debe contener 1 minuscula como minimo</p>
+      <p class="msjError" *ngIf="formGroup.get('clave').touched && formGroup.get('clave').hasError('numero')">
+        Debe contener 1 numero como minimo</p>
+
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label class="blanco">Repetir clave</mat-label>
+        <input type="password" matInput formControlName="confirmarClave" required>
+      </mat-form-field>
+      <p class="msjError" *ngIf="revisarSiSonIguales()">Las claves no coinciden</p> 
+
+      <ion-button expand="block" type="sumbit">Cambiar clave</ion-button>    
+
+    </form>
+
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>

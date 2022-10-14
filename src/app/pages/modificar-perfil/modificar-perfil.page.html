@@ -8,6 +8,7 @@
 </ion-header>
 
 <ion-content class="fondo">
+  <img class="center" src="../../../assets/asd.png" />
   <ion-card>
     <ion-card-header>
       <ion-card-title>Modificar perfil</ion-card-title>
@@ -17,19 +18,36 @@
     <ion-card-content>
 
 
-      <form [formGroup]="formGroup" (ngSubmit)="pasarDatos('/perfil')">
+      <form [formGroup]="formGroup" (ngSubmit)="modificarPerfil()">
 
-        <mat-form-field appearance="outline">
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label class="blanco">Nombre usuario</mat-label>
-          <input type="text" matInput  formControlName="nombre" readonly>
+          <input type="text" [(ngModel)]="usuario.nombre_usuario" id="nombre_usuario" matInput  formControlName="nombre_usuario">
+        </mat-form-field>
+
+        
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label class="blanco">Nombre</mat-label>
+          <input type="text" [(ngModel)]="usuario.nombre" matInput id="nombre" formControlName="nombre">
+        </mat-form-field>
+
+        
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label class="blanco">Apellidos</mat-label>
+          <input type="text" matInput [(ngModel)]="usuario.apellidos" id="apellidos" formControlName="apellidos" >
+        </mat-form-field>
+
+        
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label class="blanco">Email</mat-label>
+          <input type="email" [(ngModel)]="usuario.email" matInput id="email" formControlName="email" >
         </mat-form-field>
 
 
         <ion-button expand="block" type="submit">Modificar</ion-button>
 
       </form>
-      <div style="text-align: center">
-      </div>
+      
 
       <ion-button expand="block" [routerLink]="['/cambiar-clave']">Cambiar clave</ion-button>
     </ion-card-content>

@@ -31,17 +31,23 @@ ion-card-title {
   text-align: center;
 }
 
+.quitarEstilo {
+  text-decoration: none;
+  font-weight: bold;
+  color: #e8bffd;
+}
+
 .boton {
   --color: #fffeff;
   --background: #4f2e7f;
   --background-hover-opacity: 20%;
-  margin-bottom: 2px;
+  margin-bottom: 15px;
 
 }
 
 .botonRojo {
   --color: #fffeff;
-  --background: #670303;
+  --background: #510303;
   transition: all 0.3s;
   --background-hover: black;
 }

@@ -67,6 +67,11 @@ export class RegistroVehiculoPage implements OnInit {
       }
     })
 
+    if(this.usuario.email === '' || this.usuario.nombre === '' || this.usuario.apellidos === '') {
+      this.servicioBD.presentAlert('ALERTA', 'Faltan datos de usuario', 'Seras redirigido a la pagina')
+      this.router.navigate(['modificar-perfil'])  
+    }
+
   }
 
   insertar() {

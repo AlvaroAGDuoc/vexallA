@@ -15,14 +15,14 @@ export class CambiarClavePage implements OnInit {
   formGroup: any
   usuario: any = {}
   
-  constructor( private servicioBD: BdservicioService, private storage: Storage, private router: Router) {
+  constructor( private servicioBD: BdservicioService, private storage: Storage, private router: Router, private validacionesCustom: validacionesCustom) {
 
     this.storage.get('usuario').then((val) => {
       this.usuario = val
     })
 
     this.formGroup = new FormGroup({
-      clave: new FormControl('', [Validators.required]),
+      clave: new FormControl('', [Validators.required, Validators.minLength(6), this.validacionesCustom.validarMayuscula(), this.validacionesCustom.validarMinuscula(), this.validacionesCustom.validarNumero()], ),
       confirmarClave: new FormControl('', [Validators.required]),
       claveActual: new FormControl('', [Validators.required]),
     }, {

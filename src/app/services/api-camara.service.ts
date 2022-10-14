@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ApiCamaraService {
 
   foto = new BehaviorSubject('');
+  formFoto : any;
 
   constructor(private camera: Camera) { }
 
@@ -20,8 +21,8 @@ export class ApiCamaraService {
       mediaType: this.camera.MediaType.PICTURE
     }
     this.camera.getPicture(options).then((imageData) => {
-      let formFoto = 'data:image/jpeg;base64,' + imageData;
-      this.foto.next(formFoto) ;
+      this.formFoto = 'data:image/jpeg;base64,' + imageData;
+      this.foto.next(this.formFoto) ;
     }, (err) => {
       console.log(err)
     });

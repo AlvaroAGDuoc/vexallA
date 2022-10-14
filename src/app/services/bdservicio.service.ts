@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
-import { Platform, ToastController } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Marcas } from './marcas.service';
 import { Reportes } from './reportes.service';
@@ -16,13 +16,13 @@ export class BdservicioService {
   public database: SQLiteObject;
   //variable para la sentencia de creación de las tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS ROL(id_rol INTEGER PRIMARY KEY, nombre_rol VARCHAR(10));";
-  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), rol_id INTEGER, foto BLOB,  foreign key(rol_id) references ROL(id_rol));";
+  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), nombre VARCHAR(30), apellidos VARCHAR(50), email VARCHAR(40), rol_id INTEGER, foto BLOB,  foreign key(rol_id) references ROL(id_rol));";
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
   tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
 
   tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje VARCHAR(30), hora_salida VARCHAR(30), asientos_dispo INTEGER, monto INTEGER, patente_auto VARCHAR(6), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente));";
 
-  tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, foreign key(usuario_id_usuario) references USUARIO(id_usuario), foreign key(viaje_id) references VIAJE(id_viaje), PRIMARY KEY(viaje_id, usuario_id_usuario));";
+  tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, foreign key(usuario_id_usuario) references USUARIO(id_usuario), foreign key(viaje_id) references VIAJE(id_viaje) ON DELETE CASCADE, PRIMARY KEY(viaje_id, usuario_id_usuario) );";
 
 
   //variable para la sentencia de registros por defecto en la tabla
@@ -51,7 +51,7 @@ export class BdservicioService {
   //observable para manipular si la BD esta lista  o no para su manipulación
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private sqlite: SQLite, private platform: Platform, private toastController: ToastController) {
+  constructor(private sqlite: SQLite, private platform: Platform, private toastController: ToastController, private alertController: AlertController) {
 
     this.crearBD()
 
@@ -61,7 +61,8 @@ export class BdservicioService {
     const toast = await this.toastController.create({
       message: msj,
       duration: 3000,
-      icon: 'globe'
+      icon: 'globe',
+      color: 'success'
     });
     await toast.present();
 
@@ -75,6 +76,15 @@ export class BdservicioService {
     });
     await toast.present();
 
+  }
+
+  async presentAlert(header, sub, msj) {
+    const alert = await this.alertController.create({
+      header: header,
+      subHeader: sub,
+      message: msj,
+    });
+    await alert.present();
   }
 
   dbState() {
@@ -108,7 +118,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'AASFD232423.db',
+        name: 'CASICASI3.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -218,6 +228,9 @@ export class BdservicioService {
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             clave: res.rows.item(i).clave,
+            nombre: res.rows.item(i).nombre,
+            apellidos : res.rows.item(i).apellidos,
+            email: res.rows.item(i).email,
             rol_id: res.rows.item(i).rol_id,
             foto: res.rows.item(i).foto
           })
@@ -245,6 +258,9 @@ export class BdservicioService {
       id_usuario: '',
       nombre_usuario: '',
       clave: '',
+      nombre: '',
+      apellidos: '',
+      email: '',
       rol_id: '',
       foto: Blob
     }
@@ -256,6 +272,9 @@ export class BdservicioService {
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             clave: res.rows.item(i).clave,
+            nombre: res.rows.item(i).nombre,
+            apellidos : res.rows.item(i).apellidos,
+            email: res.rows.item(i).email,
             rol_id: res.rows.item(i).rol_id,
             foto: res.rows.item(i).foto
           }
@@ -321,9 +340,16 @@ export class BdservicioService {
 
   }
 
-  agregarUsuario(id_usuario, nombre_usuario, clave, rol_id, foto: Blob) {
-    let data = [id_usuario, nombre_usuario, clave, rol_id, foto];
-    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, rol_id, foto) VALUES (?,?,?,?,?)', data).then(res => {
+  agregarUsuario(id_usuario, nombre_usuario, clave, nombre, apellidos, email, rol_id, foto: Blob) {
+    let data = [id_usuario, nombre_usuario, clave, nombre, apellidos, email,  rol_id, foto];
+    return this.database.executeSql('INSERT OR IGNORE INTO USUARIO(id_usuario, nombre_usuario, clave, nombre, apellidos, email, rol_id, foto) VALUES (?,?,?,?,?,?,?,?)', data).then(res => {
+      this.buscarUsuarios()
+    })
+  }
+
+  modificarUsuario(nombre_usuario, nombre, apellidos, email, id) {
+    let data = [nombre_usuario, nombre, apellidos, email, id]
+    return this.database.executeSql('UPDATE USUARIO SET NOMBRE_USUARIO = ?, NOMBRE = ?, APELLIDOS = ?, EMAIL= ? WHERE ID_USUARIO = ? ', data).then((res) => {
       this.buscarUsuarios()
     })
   }
@@ -331,6 +357,19 @@ export class BdservicioService {
   unirseRuta(id_usuario, id_viaje) {
     let data = [id_usuario, id_viaje, 1];
     return this.database.executeSql('INSERT OR IGNORE INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES(?, ?, ?)', data).then(res => {
+      this.buscarRutas()
+    })
+  }
+
+  cancelarRuta(id_usuario, id_viaje) {
+    let data = [id_viaje, id_usuario];
+    return this.database.executeSql('DELETE FROM DETALLE_VIAJE WHERE VIAJE_ID = ? AND USUARIO_ID_USUARIO = ? ', data).then(res => {
+      this.buscarRutas()
+    })
+  }
+
+  eliminarRuta(id_viaje) {
+    return this.database.executeSql('DELETE FROM DETALLE_VIAJE WHERE VIAJE_ID = ?', [id_viaje]).then(res => {
       this.buscarRutas()
     })
   }

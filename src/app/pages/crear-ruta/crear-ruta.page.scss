@@ -11,6 +11,24 @@ ion-content {
   background-size: cover;
 }
 
+ion-card {
+  --background: #121212;
+}
+
+ion-card-subtitle,
+ion-card-title {
+  color: #e8bffd;
+  font-size: 20px;
+  text-align: center;
+}
+
+
+.hr {
+  border-bottom: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+}
+
 .mapa{
   display: block;
   width: 100%;
@@ -36,10 +54,18 @@ ion-content {
   --color: #fffeff;
   --background: #4f2e7f;
   --background-hover-opacity: 20%;
-  margin-bottom: 2px;
+  margin-bottom: 15px;
 
 }
+.boton1 {
+  --color: #fffeff;
+  --background: #4f2e7f;
+  --background-hover-opacity: 20%;
+  
+}
 
-
+.fondo {
+  --background: #4f2c80;
+}
 
 
