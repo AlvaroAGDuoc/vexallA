@@ -26,7 +26,6 @@ export class PerfilPage implements OnInit {
 
     this.storage.get('usuario').then((val) => {
       this.usuario = val
-      console.log('FOTO: ', this.usuario.foto)
       if(this.usuario.email === '' || this.usuario.nombre === '' || this.usuario.apellidos === '') {
         this.bd.presentAlert('ALERTA', 'Faltan datos de usuario', 'Seras redirigido a la pagina')
         this.router.navigate(['modificar-perfil'])  
@@ -39,8 +38,7 @@ export class PerfilPage implements OnInit {
     await this.camera.tomameFoto()
     await this.camera.foto.subscribe((res) => {
       this.usuario.foto = res
-      this.storage.set('usuario', this.usuario)
-      
+      this.storage.set('usuario', this.usuario)   
       this.bd.editarFotoUsuario(this.usuario.id_usuario, this.usuario.foto)
 
     });

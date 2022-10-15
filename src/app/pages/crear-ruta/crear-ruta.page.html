@@ -22,6 +22,7 @@
         <mat-form-field class="full-width" appearance="fill">
           <mat-label class="label">Selecciona un vehiculo</mat-label>
           <select matNativeControl formControlName="vehiculos" (change)="vehiculoSeleccionado($event)">
+            <option value="1">SELECCIONA UNA PATENTE</option>
             <option  *ngFor="let v of arregloVehiculo" [value]="v.patente">
               Modelo: {{v.modelo}}, Patente: {{v.patente}}
             </option>

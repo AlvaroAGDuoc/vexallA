@@ -24,9 +24,9 @@ export class VerRecorridoPage implements OnInit {
   }
 
   ngOnInit() {
+    
     this.storage.get('rutaSeleccionada').then((val) => {
       this.rutaSeleccionada = val
-      console.log('RUTA SELECCIONADA', JSON.stringify(this.rutaSeleccionada))
     })
 
     this.storage.get('usuario').then((val) => {
@@ -42,10 +42,13 @@ export class VerRecorridoPage implements OnInit {
      this.geo.inicioMapa(this.divMap)
   }
 
-  unirseRuta(id_viaje, id_usuario) {
-   this.servicioBD.unirseRuta(id_viaje, id_usuario)
+  unirseRuta() {
+    this.servicioBD.unirseRuta(this.rutaSeleccionada.viaje_id, this.usuario.id_usuario)
+    this.servicioBD.updateRuta(this.rutaSeleccionada.viaje_id)
+   this.rutaSeleccionada.asientos_dispo -= 1
+   this.rutaSeleccionada.asientos_ocupados += 1
+   this.storage.set('rutaSeleccionada', this.rutaSeleccionada )
    this.servicioBD.presentToast('Te has unido a la ruta con exito')
    this.router.navigate(['pantalla-principal'])
   }
-  
 }

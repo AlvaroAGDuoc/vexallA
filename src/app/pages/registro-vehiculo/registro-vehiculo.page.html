@@ -17,7 +17,7 @@
 
       <form [formGroup]="formGroup" (ngSubmit)="pasarDatos()">
 
-        <mat-form-field appearance="outline">
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label class="blanco">Patente</mat-label>
           <input type="text" matInput [(ngModel)]="patente" formControlName="patente" required>
         </mat-form-field>
@@ -28,7 +28,7 @@
           *ngIf="(formGroup.get('patente').hasError('minlength') && formGroup.get('patente').touched )">
           La patente debe tener 6 digitos</p>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label class="blanco">Modelo</mat-label>
           <input type="text" matInput [(ngModel)]="modelo" formControlName="modelo" required>
         </mat-form-field>
@@ -47,7 +47,7 @@
             </select>
           </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label class="blanco">Año</mat-label>
           <input type="number" matInput [(ngModel)]="annio" formControlName="anio" required>
         </mat-form-field>
@@ -56,7 +56,7 @@
           <p class="msjError" *ngIf="formGroup.get('anio').touched && formGroup.get('anio').hasError('num')">
           No se aceptan autos anteriores al año 2000</p>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field class="full-width"appearance="outline">
           <mat-label class="blanco">Color</mat-label>
           <input type="text" matInput [(ngModel)]="color" formControlName="color" required>
         </mat-form-field>

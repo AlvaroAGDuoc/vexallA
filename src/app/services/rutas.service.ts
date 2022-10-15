@@ -11,6 +11,7 @@ export class Rutas{
   fecha_viaje: Date;
   hora_salida: Date;
   asientos_dispo: number;
+  asientos_ocupados: number;
   monto: number;
   origen: string;
   destino: string;

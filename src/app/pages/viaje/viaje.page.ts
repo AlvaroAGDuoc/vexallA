@@ -59,6 +59,7 @@ export class ViajePage implements OnInit {
   async ngOnInit() {
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
+    
     await this.servicioBD.dbState().subscribe(res => {
       if (res) {
         this.servicioBD.fetchRutas().subscribe(item => {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-lista-vehiculo',
@@ -25,17 +26,35 @@ export class ListaVehiculoPage implements OnInit {
   usuario: any = {};
 
 
-  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router, private alertController: AlertController) {
 
     
   }
 
+  
+  async eliminar(x) {
+    const alert = await this.alertController.create({
+      header: '¿Estas seguro de eliminar el vehiculo?',
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'No',
+          cssClass: 'alert-button-cancel',
+        },
+        {
+          text: 'Si',
+          handler: () =>{
+            this.servicioBD.eliminarVehiculo(x.patente);
+            this.servicioBD.presentToast("Vehiculo Eliminado");
+          },
+          cssClass: 'alert-button-confirm',
+        },
+      ],
+    });
 
-  eliminar(x) {
-    this.servicioBD.eliminarVehiculo(x.patente);
-    this.servicioBD.presentToast("Vehiculo Eliminado");
-
+    await alert.present();
   }
+
 
 
    ngOnInit() {

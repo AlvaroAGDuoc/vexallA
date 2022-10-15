@@ -4,6 +4,7 @@ export class Reportes {
 
   fecha_viaje: string;
   hora_salida: string;
+  asientos_ocupados: number;
 
   id_usuario: number;
   status: boolean;

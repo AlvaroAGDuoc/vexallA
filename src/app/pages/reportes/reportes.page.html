@@ -8,16 +8,52 @@
 </ion-header>
 
 <ion-content> 
-
+  <img class="center" src="../../../assets/asd.png" />
   <form [formGroup]="formRep" (ngSubmit)="consultar()">
 
-  <input type="date" formControlName="fecha1" id="fecha" [min]="fechaMinima" [max]="fechaMaxima">
-  <input type="date" formControlName="fecha2" id="fecha2" [min]="fechaMinima" [max]="fechaMaxima">
+  <h3>Informe de ganancias</h3>
+  <hr class="hr">
 
-  <p class="msjError" *ngIf="revisarFechas()">La fecha de inicio no puede ser mayor a la de termino
-  </p>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        
+      </ion-col>
+      <ion-col size="5">
+        <div>
+          <p class="textoRosado">Desde</p>
+          <input type="date"  formControlName="fecha1" id="fecha" [min]="fechaMinima" [max]="fechaMaxima">
+        </div>
+      </ion-col>
+      <ion-col size="5">
+        <div>
+          <p class="textoRosado">Hasta</p>
+          <input type="date"  formControlName="fecha2" id="fecha2" [min]="fechaMinima" [max]="fechaMaxima">
+        </div>
+      </ion-col>
+      <ion-col size="1">
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <button type="submit">Reporte</button>
+  <p class="msjError" *ngIf="revisarFechas()">La fecha de inicio no puede ser mayor a la de termino</p>
+
+  <p id="rep"></p>
+<ion-list>
+  <ion-item *ngFor="let r of reportes">
+    <ion-avatar>
+      <ion-img src="assets/711769.png"></ion-img>
+    </ion-avatar>
+    <p class="espaciado"><a class="quitarEstilo">Fecha viaje: </a>{{r.fecha_viaje}}</p>
+    <p class="espaciado2"><a class="quitarEstilo">Total: </a>{{r.monto * r.asientos_ocupados | currency: 'CLP'}}</p>
+    
+  </ion-item>
+</ion-list>
+
+<ion-button expand="block" type="submit">Reporte</ion-button>
+
+  
 
 </form>
 </ion-content>

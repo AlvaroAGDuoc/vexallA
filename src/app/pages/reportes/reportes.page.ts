@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-
+import { BdservicioService } from 'src/app/services/bdservicio.service';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-reportes',
@@ -19,7 +20,11 @@ export class ReportesPage implements OnInit {
 
   formRep: any;
 
-  constructor( private date: DatePipe) {
+  usuario: any;
+
+  reportes: any = []
+
+  constructor( private date: DatePipe, private servicioBD: BdservicioService, private storage: Storage) {
 
     this.formRep = new FormGroup({
 
@@ -36,15 +41,27 @@ export class ReportesPage implements OnInit {
     this.formRep.get('fecha2').dirty;
   }
 
-
   consultar(): void {
     if(this.formRep.valid){  
-      console.log('xd')
-    }
+      this.servicioBD.generarReporte(this.formRep.get('fecha1').value, this.formRep.get('fecha2').value, this.usuario.id_usuario ).then(() => { 
+            this.servicioBD.fetchReportes().subscribe(item=>{
+              this.reportes = item;
+              if(this.reportes.length < 1){
+                (document.getElementById('rep') as HTMLElement).innerText = 'No tienes reportes '
+              }else{
+                
+              }
+        
+          })
+       }
+    )}
 
   }
 
   ngOnInit() {
+
+    this.storage.get('usuario').then((val) => this.usuario = val)
+    
     this.fechaMinima = this.date.transform(this.fechaActual , "yyyy-MM-dd");
 
     this.fechaMaxima = this.date.transform(this.fechaLimite , "yyyy-MM-dd");

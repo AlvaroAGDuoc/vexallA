@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
+import { LoadingPage } from '../loading/loading.page';
 
 @Component({
   selector: 'app-ruta-actual-pasajero',
@@ -11,17 +12,47 @@ import { BdservicioService } from 'src/app/services/bdservicio.service';
 export class RutaActualPasajeroPage implements OnInit {
 
   ruta: any = {}
-  rutaVacia: any = {}
 
-  constructor(private storage: Storage, private servicioBD: BdservicioService, private router: Router) { }
+  constructor(private storage: Storage, private servicioBD: BdservicioService, private load: LoadingPage, private alertController: AlertController) { }
 
-  cancelarRuta(){
-    this.servicioBD.cancelarRuta(this.ruta.usuario_id, this.ruta.viaje_id).then((res) =>{
-      this.servicioBD.presentToast('Ruta cancelada con exito')
-      this.storage.set('rutaSeleccionada', this.rutaVacia)
-      this.router.navigate(['pantalla-principal'])
-    })
+
+
+
+  async cancelarRuta() {
+    const alert = await this.alertController.create({
+      header: '¿Estas seguro de cancelar la ruta?',
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'No',
+          cssClass: 'alert-button-cancel',
+        },
+        {
+          text: 'Si',
+          handler: () =>{
+            let pagina = 'pantalla-principal'
+            this.servicioBD.cancelarRuta(this.ruta.usuario_id, this.ruta.viaje_id).then(() =>{
+              this.servicioBD.presentToast('Ruta cancelada con exito')
+              this.storage.remove('rutaSeleccionada')
+              this.load.loadContent(pagina)
+            })
+          },
+          cssClass: 'alert-button-confirm',
+        },
+      ],
+    });
+
+    await alert.present();
   }
+
+  // cancelarRuta(){
+  //   let pagina = 'pantalla-principal'
+  //   this.servicioBD.cancelarRuta(this.ruta.usuario_id, this.ruta.viaje_id).then((res) =>{
+  //     this.servicioBD.presentToast('Ruta cancelada con exito')
+  //     this.storage.remove('rutaSeleccionada')
+  //     this.load.loadContent(pagina)
+  //   })
+  // }
 
   ngOnInit() {
     this.storage.get('rutaSeleccionada').then((val) => {

@@ -18,7 +18,9 @@
 
   <h5 class="titulo">Rutas disponibles</h5>
   
+
     <ion-card *ngFor="let r of rutaBuscada">
+      <div *ngIf="r.status === 1">
       <ion-card-header>
         <h3>{{r.nombre_usuario}}</h3>
         <hr class="hr">
@@ -35,5 +37,7 @@
         <p>Asientos disponibles: {{r.asientos_dispo}}</p>
         <ion-button (click)="verRecorrido(r.viaje_id)" expand="block">Ver recorrido</ion-button>
       </ion-card-content>
+    </div>
     </ion-card>
+
 </ion-content>

@@ -8,6 +8,7 @@ import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Router } from '@angular/router';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { DatePipe } from '@angular/common';
+import { LoadingPage } from '../loading/loading.page';
 
 @Component({
   selector: 'app-crear-ruta',
@@ -46,7 +47,7 @@ export class CrearRutaPage implements OnInit {
   patenteSeleccionada = '';
 
 
-  constructor(private router: Router, private bd: BdservicioService, private storage: Storage, private geo: GeolocationService, private date: DatePipe) {
+  constructor( private bd: BdservicioService, private storage: Storage, private geo: GeolocationService, private date: DatePipe, private load : LoadingPage) {
 
 
 
@@ -66,9 +67,6 @@ export class CrearRutaPage implements OnInit {
   }
 
  async  ngOnInit() {
-
-  
-
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
     
@@ -96,6 +94,7 @@ export class CrearRutaPage implements OnInit {
   }
 
 
+
   crearRuta() {
     if (this.formMapas.valid) {
       let fecha = new Date()
@@ -106,21 +105,25 @@ export class CrearRutaPage implements OnInit {
       let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value
       let ruta2 = (document.getElementById('rutaFin') as HTMLInputElement).value
       let status = 1;
-
+      let asientos_ocupados= 0
+        
+      let pagina = 'pantalla-principal'
       let datosStorage = {
         usuario_id: this.usuario.id_usuario,
         nombre_usuario: this.usuario.nombre_usuario,
         fecha_viaje: fecha,
         hora_salida: hora_actual,
         asientos_dispo: asientos,
+        asientos_ocupados : asientos_ocupados,
         monto: precio,
         origen: ruta1,
         destino: ruta2,
         status: status
       }
-      this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2)
+      this.bd.agregarRuta(fecha_viaje, hora_actual, asientos, asientos_ocupados, precio, this.patenteSeleccionada, this.usuario.id_usuario, status, ruta1, ruta2)
       this.storage.set('rutaSeleccionada', datosStorage)
-      this.router.navigate(['/pantalla-principal'])
+      this.bd.presentToast('Ruta creada con exito')
+      this.load.loadContent(pagina)
     } else {
       this.bd.presentToast2("Todos los campos deben ser llenados")
     }

@@ -58,7 +58,6 @@ export class RegistroVehiculoPage implements OnInit {
   }
 
   async ngOnInit() {
-    
     await this.servicioBD.dbState().subscribe(res=>{
       if(res){
         this.servicioBD.fetchMarcas().subscribe(item=>{
