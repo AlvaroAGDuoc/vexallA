@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage-angular';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Router } from '@angular/router';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-crear-ruta',
@@ -26,6 +27,10 @@ export class CrearRutaPage implements OnInit {
 
   usuario: any = {};
 
+  fechaActual = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() )
+
+  fechaMinima: string;
+
   arregloVehiculo: any = [
     {
       patente: '',
@@ -41,7 +46,8 @@ export class CrearRutaPage implements OnInit {
   patenteSeleccionada = '';
 
 
-  constructor(private router: Router, private bd: BdservicioService, private storage: Storage, private geo: GeolocationService) {
+  constructor(private router: Router, private bd: BdservicioService, private storage: Storage, private geo: GeolocationService, private date: DatePipe) {
+
 
 
     this.formMapas = new FormGroup({
@@ -50,6 +56,7 @@ export class CrearRutaPage implements OnInit {
       ruta2: new FormControl('', [Validators.required]),
       precio: new FormControl(''),
       asientos: new FormControl(''),
+      fecha: new FormControl(''),
     })
 
   }
@@ -59,6 +66,8 @@ export class CrearRutaPage implements OnInit {
   }
 
  async  ngOnInit() {
+
+  
 
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
@@ -91,7 +100,7 @@ export class CrearRutaPage implements OnInit {
     if (this.formMapas.valid) {
       let fecha = new Date()
       let hora_actual = fecha.toLocaleTimeString()
-      let fecha_viaje = fecha.toLocaleDateString()
+      let fecha_viaje = this.date.transform(this.fechaActual , "yyyy-MM-dd");
       let asientos = (document.getElementById('asientos') as HTMLInputElement).value;
       let precio = (document.getElementById('precio') as HTMLInputElement).value;
       let ruta1 = (document.getElementById('rutaInicio') as HTMLInputElement).value

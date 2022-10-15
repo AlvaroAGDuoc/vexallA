@@ -7,6 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content> 
 
+  <form [formGroup]="formRep" (ngSubmit)="consultar()">
+
+  <input type="date" formControlName="fecha1" id="fecha" [min]="fechaMinima" [max]="fechaMaxima">
+  <input type="date" formControlName="fecha2" id="fecha2" [min]="fechaMinima" [max]="fechaMaxima">
+
+  <p class="msjError" *ngIf="revisarFechas()">La fecha de inicio no puede ser mayor a la de termino
+  </p>
+
+  <button type="submit">Reporte</button>
+
+</form>
 </ion-content>

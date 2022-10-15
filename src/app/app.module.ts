@@ -15,6 +15,7 @@ import { Drivers } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -24,7 +25,7 @@ import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule, MatProgressSpinnerModule, IonicStorageModule.forRoot({
     driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
   }), HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, SQLite, Camera, Geolocation],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, SQLite, Camera, Geolocation, DatePipe],
   bootstrap: [AppComponent],
 })
 
