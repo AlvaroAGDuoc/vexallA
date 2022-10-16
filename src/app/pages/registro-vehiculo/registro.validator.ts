@@ -60,20 +60,6 @@ export class validacionesCustom {
     };
   }
 
-  verificarTelefono(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      if (!control.value) {
-        return null;
-      }
-
-      const control2 = control.value.toString()
-      if (control2.length == 9) {
-        return null;
-      } else {
-        return { num: true }
-      }
-    };
-  }
 
 
 }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
+import { LoadingPage } from '../loading/loading.page';
 
 @Component({
   selector: 'app-pantalla-principal',
@@ -13,8 +14,14 @@ export class PantallaPrincipalPage implements OnInit {
   usuario: any = {}
 
   ruta: any = {}
-  constructor(private storage: Storage, private servicioBD: BdservicioService, private router: Router) {
+  pagina = 'login'
+  constructor(private storage: Storage, private servicioBD: BdservicioService, private router: Router, private load: LoadingPage ) {
 
+  }
+
+  desconectarse(){
+    this.storage.set('usuario', this.usuario)
+    this.load.loadContent(this.pagina)
   }
 
   async ngOnInit() {
@@ -31,7 +38,6 @@ export class PantallaPrincipalPage implements OnInit {
     await this.servicioBD.buscarRutaActual(this.usuario.id_usuario, this.usuario.id_usuario)
     await this.servicioBD.rutaActual.subscribe(item => {
       this.ruta = item;
-      console.log('RUTA ', JSON.stringify(this.ruta))
       this.storage.set('rutaSeleccionada', this.ruta)
     })
   }

@@ -60,7 +60,7 @@ export class BdservicioService {
   async presentToast(msj: string) {
     const toast = await this.toastController.create({
       message: msj,
-      duration: 3000,
+      duration: 2000,
       icon: 'globe',
       color: 'success'
     });
@@ -70,7 +70,7 @@ export class BdservicioService {
   async presentToast2(msj: string) {
     const toast = await this.toastController.create({
       message: msj,
-      duration: 3000,
+      duration: 2000,
       icon: 'globe',
       color: 'danger'
     });
@@ -298,7 +298,7 @@ export class BdservicioService {
     })
   }
 
-  validarNombre(nombre) {
+  validarNombre(nombre: string) {
     //retorno la ejecución del select
     return this.database.executeSql('SELECT COUNT(NOMBRE_USUARIO) AS CONTENOM FROM USUARIO WHERE NOMBRE_USUARIO = ?', [nombre]).then(res => {
       if (res.rows.item(0).CONTENOM === 0) {
@@ -306,9 +306,10 @@ export class BdservicioService {
       }
       return false;
     })
+    
   }
 
-  editarClaveNombre(nombre, clave) {
+  editarClaveNombre(clave, nombre) {
     let data = [clave, nombre]
     return this.database.executeSql('UPDATE USUARIO SET CLAVE = ? WHERE NOMBRE_USUARIO = ? ', data).then((res) => {
       this.buscarUsuarios()

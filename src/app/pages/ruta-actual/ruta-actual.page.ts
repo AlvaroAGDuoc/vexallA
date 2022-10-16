@@ -95,7 +95,6 @@ export class RutaActualPage implements OnInit {
 
     await this.servicioBD.rutaActual.subscribe(item => {
       this.ruta = item;
-      console.log('RUTA ', JSON.stringify(this.ruta))
       this.storage.set('rutaSeleccionada', this.ruta)
     })
   }

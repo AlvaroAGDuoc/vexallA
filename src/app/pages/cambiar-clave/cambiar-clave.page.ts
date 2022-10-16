@@ -4,6 +4,7 @@ import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { validarClaves, validacionesCustom } from '../registro-vehiculo/registro.validator';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
+import { LoadingPage } from '../loading/loading.page';
 
 @Component({
   selector: 'app-cambiar-clave',
@@ -15,7 +16,7 @@ export class CambiarClavePage implements OnInit {
   formGroup: any
   usuario: any = {}
   
-  constructor( private servicioBD: BdservicioService, private storage: Storage, private router: Router, private validacionesCustom: validacionesCustom) {
+  constructor( private servicioBD: BdservicioService, private storage: Storage, private validacionesCustom: validacionesCustom, private load: LoadingPage) {
 
     this.storage.get('usuario').then((val) => {
       this.usuario = val
@@ -44,13 +45,13 @@ export class CambiarClavePage implements OnInit {
     if(this.formGroup.valid){
       this.servicioBD.validarClave(clave).then((res) => {
         if (res) {
-          this.servicioBD.presentToast('NO')
+          this.servicioBD.presentToast2('La clave actual no es valida')
         } else {
           this.usuario.clave = claveNueva
           this.storage.set('usuario', this.usuario)
           this.servicioBD.editarClaveUsuario(this.usuario.id_usuario, claveNueva)
           this.servicioBD.presentToast('Clave cambiada con exito')
-          this.router.navigate(['/perfil'])
+          this.load.loadContent('perfil')
         }
       }
     )

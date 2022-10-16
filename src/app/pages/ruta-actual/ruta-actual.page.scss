@@ -9,16 +9,21 @@
   --color: #fffeff;
   --background: #4f2e7f;
   --background-hover-opacity: 20%;
+  margin-bottom: 15px;
 }
 ul {
   list-style-type: none;
 }
 
+ion-card{
+  margin-top: 30px;
+}
+
 ion-card-subtitle,
 ion-card-title {
-  color: #e8bffd;
-  font-size: 20px;
-  text-align: center;
+    color: #e8bffd;
+    font-size: 20px;
+    text-align: center;
 }
 .center {
   display: block;
@@ -34,7 +39,10 @@ ion-card-title {
   color: #e8bffd;
 }
 
-
+.distancia {
+  font-size: 15px;
+  color: #e8bffd;
+}
 
 
 .hr {

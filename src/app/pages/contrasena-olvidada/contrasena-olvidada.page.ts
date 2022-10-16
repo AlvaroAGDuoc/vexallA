@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { LoadingPage } from '../loading/loading.page';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ContrasenaOlvidadaPage implements OnInit {
 
   formGroup: any;
 
-  constructor(private servicioBD: BdservicioService, private router: Router, private storage: Storage) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private load: LoadingPage) {
 
     this.formGroup = new FormGroup({
       nombre: new FormControl('', [Validators.required]),
@@ -32,15 +33,15 @@ export class ContrasenaOlvidadaPage implements OnInit {
   validarUsuario() {
 
     let nombre = (document.getElementById('nombre') as HTMLInputElement).value;
+    let pagina = 'paso2-olvidada'
     if (this.formGroup.valid) {
       this.servicioBD.validarNombre(nombre).then((res) => {
         if (res) {
-          this.servicioBD.presentToast2('NO')
+          this.servicioBD.presentToast2('El nombre no se encuentra registrado')
         } else {
-
           this.storage.set('usuarioClave', nombre)
           this.servicioBD.presentToast('Usuario valido')
-          this.router.navigate(['/paso2-olvidada'])
+          this.load.loadContent(pagina)
         }
       })
     }

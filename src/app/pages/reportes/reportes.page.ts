@@ -48,7 +48,6 @@ export class ReportesPage implements OnInit {
     if (this.formRep.valid) {
       this.total = 0
       this.servicioBD.generarReporte(this.formRep.get('fecha1').value, this.formRep.get('fecha2').value, this.usuario.id_usuario).then((res) => {
-        // this.servicioBD.fetchReportes().subscribe(item => {
           this.reportes = res;
           if (this.reportes.length < 1) {
             this.servicioBD.presentToast2('No tienes viajes en este periodo de tiempo')
@@ -61,7 +60,6 @@ export class ReportesPage implements OnInit {
           }
 
         })
-      // })
     }
   }
   

@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage-angular';
 import { ApiCamaraService } from 'src/app/services/api-camara.service';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { LoadingPage } from '../loading/loading.page';
 
 
 @Component({
@@ -15,9 +16,15 @@ export class PerfilPage implements OnInit {
 
   usuario: any = {};
 
+  pagina = 'login'
 
-  constructor(private storage: Storage, private camera: ApiCamaraService, private bd: BdservicioService, private router: Router) {
+  constructor(private storage: Storage, private camera: ApiCamaraService, private bd: BdservicioService, private router: Router, private load: LoadingPage) {
    
+  }
+
+  desconectarse(){
+    this.storage.set('usuario', this.usuario)
+    this.load.loadContent(this.pagina)
   }
 
   async ngOnInit() {

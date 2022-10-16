@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>verRecorrido</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -22,10 +21,10 @@
 
       <ion-col size="6">
         <h6>Descripción auto</h6>
-        <p><a>Patente: {{this.rutaSeleccionada.patente}}</a> </p>
-        <p><a>Modelo: {{this.rutaSeleccionada.modelo}}</a> </p>
-        <p>Color: {{this.rutaSeleccionada.color}}</p>
-        <p><a>Asientos disponibles: {{this.rutaSeleccionada.asientos_dispo}}</a> </p>
+        <p><a class="quitarEstilo">Patente: </a>{{this.rutaSeleccionada.patente}} </p>
+        <p><a class="quitarEstilo">Modelo: </a>{{this.rutaSeleccionada.modelo}} </p>
+        <p><a class="quitarEstilo">Color: </a>{{this.rutaSeleccionada.color}}</p>
+        <p><a class="quitarEstilo">Asientos disponibles: {{this.rutaSeleccionada.asientos_dispo}}</a> </p>
       </ion-col>
     
       <ion-col size="6">

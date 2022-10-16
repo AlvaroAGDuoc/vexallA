@@ -3,6 +3,7 @@ import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { LoadingPage } from '../loading/loading.page';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class ViajePage implements OnInit {
   rutaBuscada: any;
 
 
-  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router, private load: LoadingPage) {
   }
 
 
@@ -52,7 +53,7 @@ export class ViajePage implements OnInit {
   verRecorrido(id_viaje) {
     this.servicioBD.buscarRuta(id_viaje).then((res)=> {
       this.storage.set('rutaSeleccionada', res)
-      this.router.navigate(['ver-recorrido'])
+      this.load.loadContent('ver-recorrido')
     })
   }
 

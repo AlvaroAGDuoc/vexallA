@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>registroVehiculo</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -39,7 +38,7 @@
           El modelo debe tener 2 caracteres como minimo</p>
 
           <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Selecciona una marca</mat-label>
+            <mat-label class="blanco">Selecciona una marca</mat-label>
             <select matNativeControl (change)="marcaSeleccionada($event)">
               <option *ngFor="let m of arregloMarcas" [value]="m.id_marca">
                   {{m.nombre_marca}}

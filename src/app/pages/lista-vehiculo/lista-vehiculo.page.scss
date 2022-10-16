@@ -1,7 +1,7 @@
 $blanco: #b2b2b2;
 
 
-ion-button {
+.botonRojo {
     margin-top: 20px;
     margin-bottom: 10px;
     --color: #fffeff;
@@ -16,6 +16,13 @@ ion-card-content {
     --background: #121212;
 }
 
+.boton {
+    --color: #fffeff;
+    --background: #4f2e7f;
+    --background-hover-opacity: 20%;
+    margin-bottom: 15px;
+  
+  }
 
 ion-item {
     --background: ;
@@ -33,9 +40,9 @@ img {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    clip-path: circle();
+    // clip-path: circle();
     height: 150px;
-    width: 550px;
+    width: 150px;
     margin-bottom: 5px;
 }
 
@@ -78,6 +85,18 @@ h3 {
     text-decoration: none;
     font-weight: bold;
     color: #e8bffd;
+  }
+
+  .link{
+    text-decoration: underline;
+    font-weight: bold;
+    color: #e9ccf8;
+    
+  }
+
+  .linkp{
+    text-align: center;
+    margin-top: 15px;
   }
 
 p {

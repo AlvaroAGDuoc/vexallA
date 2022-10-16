@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>rutaActual</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -8,9 +7,7 @@
 </ion-header>
 
 <ion-content>
-  <img class="center" src="../../../assets/asd.png" />
-  <ion-card >
-
+<ion-card>
     <ion-card-header>
       <ion-card-title>Ruta actual</ion-card-title>
       <hr class="hr">
@@ -20,17 +17,17 @@
       <p><a class="quitarEstilo">Origen: </a>{{this.ruta.origen}}</p>
       <p><a class="quitarEstilo">Destino: </a>{{this.ruta.destino}}</p>
       <p><a class="quitarEstilo">Precio:</a> {{this.ruta.monto | currency: 'CLP'}}</p>
-      <p><a class="quitarEstilo">Asientos: </a>{{this.ruta.asientos_dispo}}</p>
+      <p><a class="quitarEstilo">Asientos disponibles: </a>{{this.ruta.asientos_dispo}}</p>
 
       <ul>
         <p> <a class="quitarEstilo">Pasajeros: </a></p>
         <li *ngFor="let p of pasajeros">{{p.nombre}}</li>
       </ul>
-      <p>Asientos ocupados: {{this.ruta.asientos_ocupados}}</p>
+      
 
-  
-      <ion-button  class="botonRojo" id="eliminar" (click)="eliminarRuta()" size="default" expand="block">Eliminar ruta</ion-button>
       <ion-button  class="boton" id="comenzar" (click)="empezarRuta()" size="default" expand="block">Comenzar ruta</ion-button>
+      <ion-button  class="botonRojo" id="eliminar" (click)="eliminarRuta()" size="default" expand="block">Eliminar ruta</ion-button>
+      
     </ion-card-content>
   </ion-card>
 
@@ -38,7 +35,7 @@
   
   <div class="mapa"  id="mapa" #divMap hidden></div>
 
-  <h2 id="distancia"  hidden>{{distancia}}</h2>
+  <h2 class="distancia" id="distancia"  hidden>{{distancia}}</h2>
 
   <ion-button  class="boton" id="terminar" (click)="terminarRuta()" size="default" expand="block" hidden>Terminar ruta</ion-button>
 

@@ -1,15 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>rutaActualPasajero</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <img class="center" src="../../../assets/asd.png" />
   <ion-card>
 
     <ion-card-header>
-      <h3>Ruta actual</h3>
+      <ion-card-title>Ruta actual</ion-card-title>
       <hr class="hr">
     </ion-card-header>
 
@@ -17,9 +19,15 @@
       <p><a class="quitarEstilo">Origen: </a>{{this.ruta.origen}}</p>
       <p><a class="quitarEstilo">Destino: </a>{{this.ruta.destino}}</p>
       <p><a class="quitarEstilo">Precio: {{this.ruta.monto | currency: 'CLP'}}</a></p>
-      <ion-button (click)="cancelarRuta()" botonRojo="boton" size="default" expand="block">Cancelar ruta</ion-button>
+      <ion-button (click)="verRuta()" class="boton" size="default" expand="block">Ver ruta</ion-button>
+      <ion-button (click)="cancelarRuta()" class="botonRojo" size="default" expand="block">Cancelar ruta</ion-button>
     </ion-card-content>
   </ion-card>
+
+   
+  <div class="mapa"  id="mapa" #divMap hidden></div>
+
+  <h2 class="distancia" id="distancia" hidden>{{distancia}}</h2>
 
 
 </ion-content>

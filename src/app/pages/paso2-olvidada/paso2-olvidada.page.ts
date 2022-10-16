@@ -15,11 +15,9 @@ export class Paso2OlvidadaPage implements OnInit {
   formGroup: any;
   
   usuario : any;
-  constructor(private validacionesCustom: validacionesCustom, private servicioBD: BdservicioService, private router: Router, private storage: Storage) { 
 
-    this.storage.get('usuarioClave').then((val)=> {
-      this.usuario = val
-    })
+  constructor(private validacionesCustom: validacionesCustom, private servicioBD: BdservicioService, private router: Router, private storage: Storage) { 
+   
 
     this.formGroup = new FormGroup({
       clave: new FormControl('', [Validators.required, Validators.minLength(6), this.validacionesCustom.validarMayuscula(), this.validacionesCustom.validarMinuscula(), this.validacionesCustom.validarNumero()], ),
@@ -38,8 +36,9 @@ export class Paso2OlvidadaPage implements OnInit {
 
   cambiarClave() {
     let clave1 = (document.getElementById('clave1') as HTMLInputElement).value;
-    if (this.formGroup.valid) {
-      this.servicioBD.editarClaveNombre(this.usuario, clave1)
+    if (this.formGroup.valid) {    
+      console.log('USUAARIO:', this.usuario)
+      this.servicioBD.editarClaveNombre(clave1, this.usuario )
       this.servicioBD.presentToast('Clave cambiada con exito')
       this.router.navigate(['/login'])
     }else(
@@ -47,7 +46,12 @@ export class Paso2OlvidadaPage implements OnInit {
     )
   }
 
-  ngOnInit() {
+   ngOnInit() {
+    this.storage.get('usuarioClave').then((val)=> {
+      this.usuario = val
+      console.log(this.usuario)
+    })
+
   }
 
 }

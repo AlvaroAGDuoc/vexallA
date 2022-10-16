@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>crearRuta</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -8,6 +7,7 @@
 </ion-header>
 
 <ion-content class="fondo">
+  <img class="center" src="../../../assets/asd.png" />
   <ion-card>
     <ion-card-header>
       <ion-card-title>Crear ruta</ion-card-title>
@@ -20,9 +20,8 @@
       <form [formGroup]="formMapas" (ngSubmit)="crearRuta()" class="form">
 
         <mat-form-field class="full-width" appearance="fill">
-          <mat-label class="label">Selecciona un vehiculo</mat-label>
           <select matNativeControl formControlName="vehiculos" (change)="vehiculoSeleccionado($event)">
-            <option value="1">SELECCIONA UNA PATENTE</option>
+            <option value="1" >Selecciona un vehiculo</option>
             <option  *ngFor="let v of arregloVehiculo" [value]="v.patente">
               Modelo: {{v.modelo}}, Patente: {{v.patente}}
             </option>
@@ -40,7 +39,7 @@
           <input matInput type="text" #rutaFin id="rutaFin" formControlName="ruta2">
         </mat-form-field>
 
-        <h2 id="distancia"></h2>
+        <h2 class="distancia" id="distancia"></h2>
 
 
         <mat-form-field class="full-width" appearance="fill">
