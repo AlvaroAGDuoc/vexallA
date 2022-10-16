@@ -3,7 +3,6 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Marcas } from './marcas.service';
-import { Reportes } from './reportes.service';
 import { Rutas } from './rutas.service';
 import { UsuariosService } from './usuarios.service';
 import { Vehiculos } from './vehiculos.service';
@@ -43,7 +42,6 @@ export class BdservicioService {
 
   listaVehiculos = new BehaviorSubject([]);
   listaMarcas = new BehaviorSubject([]);
-  listaReportes = new BehaviorSubject([]);
   listaRutas = new BehaviorSubject([]);
   listaUsuarios = new BehaviorSubject([]);
   rutaActual = new BehaviorSubject({});
@@ -101,9 +99,6 @@ export class BdservicioService {
     return this.listaMarcas.asObservable();
   }
 
-  fetchReportes(): Observable<Reportes[]> {
-    return this.listaReportes.asObservable();
-  }
 
   fetchRutas(): Observable<Rutas[]> {
     return this.listaRutas.asObservable();
@@ -120,7 +115,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'CASICASI7.db',
+        name: 'CASICASI8.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -499,8 +494,9 @@ export class BdservicioService {
     })
   }
 
-  buscarRutaActual(id_usuario) {
-    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) WHERE DV.USUARIO_ID_USUARIO = ? AND DV.STATUS = 1 OR DV.USUARIO_ID_USUARIO = ? AND DV.STATUS = 2 ', [id_usuario]).then(res => {
+  buscarRutaActual(id_usuario, id2) {
+    let data = [id_usuario, id2]
+    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) WHERE DV.USUARIO_ID_USUARIO = ? AND DV.STATUS = 1 OR DV.USUARIO_ID_USUARIO = ? AND DV.STATUS = 2 ', data).then(res => {
       let rutaSeleccionada = {
         usuario_id: '',
         nombre_usuario: '',
@@ -553,14 +549,14 @@ export class BdservicioService {
   }
 
   generarReporte(fecha1, fecha2, id_usuario) {
+    let reportes =[]
     let datos = [fecha1, fecha2, id_usuario]
     return this.database.executeSql("SELECT * FROM DETALLE_VIAJE DV JOIN VIAJE V ON (DV.VIAJE_ID = V.ID_VIAJE)  WHERE FECHA_VIAJE BETWEEN ? AND ? AND USUARIO_ID_USUARIO = ?  AND STATUS = 3", datos).then(res => {
 
-      let items: Reportes[] = [];
 
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {     
-          items.push({
+          reportes.push({
             id_viaje: res.rows.item(i).id_viaje,
             fecha_viaje: res.rows.item(i).fecha_viaje,
             hora_salida: res.rows.item(i).hora_salida,
@@ -571,8 +567,7 @@ export class BdservicioService {
           })
         }
       }
-
-      this.listaReportes.next(items);
+        return reportes
     })
   }
 

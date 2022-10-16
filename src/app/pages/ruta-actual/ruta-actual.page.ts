@@ -36,6 +36,8 @@ export class RutaActualPage implements OnInit {
       (document.getElementById('mapa') as HTMLDivElement).removeAttribute('hidden');
       (document.getElementById('distancia') as HTMLElement).removeAttribute('hidden');
       (document.getElementById('terminar') as HTMLElement).removeAttribute('hidden');
+      (document.getElementById('eliminar') as HTMLElement).setAttribute('hidden', 'true');
+      (document.getElementById('comenzar') as HTMLElement).setAttribute('hidden', 'true');
     })
     this.ruta.status = 2
     this.storage.set('rutaSeleccionada', this.ruta)
@@ -78,14 +80,6 @@ export class RutaActualPage implements OnInit {
     await alert.present();
   }
 
-
-  // eliminarRuta(){
-  //   this.servicioBD.eliminarRuta(this.ruta.viaje_id).then((res) =>{
-  //     this.servicioBD.presentToast('Ruta eliminada con exito')
-  //     this.storage.remove('rutaSeleccionada')
-  //     this.load.loadContent(this.pagina)
-  //   })
-  // }
 
   async ngOnInit() {
 

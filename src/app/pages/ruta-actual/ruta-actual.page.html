@@ -29,18 +29,18 @@
       <p>Asientos ocupados: {{this.ruta.asientos_ocupados}}</p>
 
   
-      <ion-button class="botonRojo" (click)="eliminarRuta()" size="default" expand="block">Eliminar ruta</ion-button>
-      <ion-button class="boton" (click)="empezarRuta()" size="default" expand="block">Comenzar ruta</ion-button>
+      <ion-button  class="botonRojo" id="eliminar" (click)="eliminarRuta()" size="default" expand="block">Eliminar ruta</ion-button>
+      <ion-button  class="boton" id="comenzar" (click)="empezarRuta()" size="default" expand="block">Comenzar ruta</ion-button>
     </ion-card-content>
   </ion-card>
 
 
   
-  <div class="mapa" id="mapa" #divMap hidden></div>
+  <div class="mapa"  id="mapa" #divMap hidden></div>
 
-  <h2 id="distancia" hidden>Te quedan {{distancia}} por recorrer</h2>
+  <h2 id="distancia"  hidden>{{distancia}}</h2>
 
-  <ion-button class="boton" id="terminar" (click)="terminarRuta()" size="default" expand="block" hidden>Terminar ruta</ion-button>
+  <ion-button  class="boton" id="terminar" (click)="terminarRuta()" size="default" expand="block" hidden>Terminar ruta</ion-button>
 
 
 </ion-content>

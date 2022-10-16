@@ -14,7 +14,7 @@ export class ApiService {
       'Access-Control-Allow-Origin': '*'
     })
   }
-  apiURL = 'https://my-json-server.typicode.com/AlvaroAGDuoc/json';
+  apiURL = 'https://my-json-server.typicode.com/victorrosendo/repoUsuariosRamos';
 
 
   getUsers(): Observable<any> {

@@ -39,7 +39,7 @@
       <ion-label>Ver ruta</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="usuario.rol_id === 1 &&  ruta.viaje_id === '' && ruta.status === 3 || usuario.rol_id === 1 &&  ruta.viaje_id === '' " [routerLink]="['/crear-ruta']" >
+    <ion-tab-button *ngIf="usuario.rol_id === 1 && ruta.status === 3 || usuario.rol_id === 1 &&  ruta.viaje_id === '' " [routerLink]="['/crear-ruta']" >
       <ion-icon name="car-sport-outline"></ion-icon>
       <ion-label>Crear ruta</ion-label>
     </ion-tab-button>
@@ -50,7 +50,7 @@
       <ion-label>Ver viaje</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button  *ngIf="usuario.rol_id === 2 && ruta.viaje_id === '' && ruta.status === 3 || usuario.rol_id === 2 &&  ruta.viaje_id === ''" [routerLink]="['/viaje']">
+    <ion-tab-button  *ngIf="usuario.rol_id === 2 && ruta.status === 3 || usuario.rol_id === 2 &&  ruta.viaje_id === ''" [routerLink]="['/viaje']">
       <ion-icon name="car-sport-outline"></ion-icon>
       <ion-label>Viajar</ion-label>
     </ion-tab-button>

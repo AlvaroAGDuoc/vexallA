@@ -28,7 +28,7 @@ export class PantallaPrincipalPage implements OnInit {
         this.router.navigate(['modificar-perfil'])
       }
     })
-    await this.servicioBD.buscarRutaActual(this.usuario.id_usuario)
+    await this.servicioBD.buscarRutaActual(this.usuario.id_usuario, this.usuario.id_usuario)
     await this.servicioBD.rutaActual.subscribe(item => {
       this.ruta = item;
       console.log('RUTA ', JSON.stringify(this.ruta))

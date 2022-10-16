@@ -43,13 +43,16 @@
 <ion-list>
   <ion-item *ngFor="let r of reportes">
     <ion-avatar>
-      <ion-img src="assets/711769.png"></ion-img>
+      <ion-img src="assets/ruta.png"></ion-img>
     </ion-avatar>
     <p class="espaciado"><a class="quitarEstilo">Fecha viaje: </a>{{r.fecha_viaje}}</p>
     <p class="espaciado2"><a class="quitarEstilo">Total: </a>{{r.monto * r.asientos_ocupados | currency: 'CLP'}}</p>
     
   </ion-item>
 </ion-list>
+
+
+<p class="total" id="total" hidden><a class="quitarEstilo">Total generado:</a> {{this.total | currency: 'CLP'}}</p>
 
 <ion-button expand="block" type="submit">Reporte</ion-button>
 

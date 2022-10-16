@@ -49,7 +49,7 @@ export class GeolocationService {
 
       distancia = resultado.routes[0].legs[0].distance.text;
 
-     (document.getElementById('distancia') as HTMLElement).innerText = 'la distancia de tu recorrido es de: ' + distancia
+     (document.getElementById('distancia') as HTMLElement).innerText = 'La distancia de tu recorrido es de: ' + distancia
     })
   } 
 
