@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage-angular';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { LoadingPage } from '../loading/loading.page';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @Component({
   selector: 'app-ruta-actual-pasajero',
@@ -16,15 +17,17 @@ export class RutaActualPasajeroPage implements OnInit {
 
   ruta: any = {}
 
-  distancia: any ;
+  distancia: any;
+
+  usuario: any;
 
   constructor(private storage: Storage, private servicioBD: BdservicioService, private load: LoadingPage, private alertController: AlertController, private geo: GeolocationService) { }
 
 
 
-  verRuta(){
-    this.geo.calcularRuta(this.ruta.origen , this.ruta.destino , this.distancia);
-    
+  verRuta() {
+    this.geo.calcularRuta(this.ruta.origen, this.ruta.destino, this.distancia);
+
     (document.getElementById('mapa') as HTMLDivElement).removeAttribute('hidden');
     (document.getElementById('distancia') as HTMLElement).removeAttribute('hidden');
   }
@@ -41,11 +44,11 @@ export class RutaActualPasajeroPage implements OnInit {
         },
         {
           text: 'Si',
-          handler: () =>{
+          handler: () => {
             let pagina = 'pantalla-principal'
-            this.servicioBD.cancelarRuta(this.ruta.usuario_id, this.ruta.viaje_id).then(() =>{
-              this.servicioBD.presentToast('Ruta cancelada con exito')
-              this.storage.remove('rutaSeleccionada')
+            this.servicioBD.updateRuta2(this.ruta.viaje_id)
+            this.servicioBD.cancelarRuta(this.usuario.id_usuario, this.ruta.viaje_id).then(() => {
+              this.servicioBD.presentToast('Ruta cancelada con exito')  
               this.load.loadContent(pagina)
             })
           },
@@ -59,14 +62,21 @@ export class RutaActualPasajeroPage implements OnInit {
 
 
 
-  ngOnInit() {
-    this.storage.get('rutaSeleccionada').then((val) => {
+  async ngOnInit() {
+    await this.storage.defineDriver(CordovaSQLiteDriver);
+    await this.storage.create();
+    await this.storage.get('rutaSeleccionada').then((val) => {
       this.ruta = val
-  })
-}
+    })
+    await this.servicioBD.rutaActual.subscribe(item => {
+      this.ruta = item;
+      this.storage.set('rutaSeleccionada', this.ruta)
+      this.storage.get('usuario').then(val => this.usuario = val)
+    })
+  }
 
-ngAfterViewInit():void {
-  this.geo.inicioMapa(this.divMap)
-}
+  ngAfterViewInit(): void {
+    this.geo.inicioMapa(this.divMap)
+  }
 
 }

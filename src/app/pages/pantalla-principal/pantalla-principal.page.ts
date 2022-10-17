@@ -36,6 +36,7 @@ export class PantallaPrincipalPage implements OnInit {
       }
     })
     await this.servicioBD.buscarRutaActual(this.usuario.id_usuario, this.usuario.id_usuario)
+    
     await this.servicioBD.rutaActual.subscribe(item => {
       this.ruta = item;
       this.storage.set('rutaSeleccionada', this.ruta)

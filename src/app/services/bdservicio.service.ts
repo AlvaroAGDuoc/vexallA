@@ -115,7 +115,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'CASICASI8.db',
+        name: 'vexallfinalx.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -354,7 +354,6 @@ export class BdservicioService {
 
   unirseRuta(id_usuario, id_viaje) {
     let data = [id_usuario, id_viaje, 1];
-    let id = id_viaje
     return this.database.executeSql('INSERT OR IGNORE INTO DETALLE_VIAJE(viaje_id, usuario_id_usuario, status) VALUES(?, ?, ?)', data).then(res => {
       this.buscarRutas()
     })
@@ -362,6 +361,12 @@ export class BdservicioService {
 
   updateRuta(id_viaje){
     this.database.executeSql('UPDATE VIAJE SET ASIENTOS_DISPO = ASIENTOS_DISPO - 1, ASIENTOS_OCUPADOS = ASIENTOS_OCUPADOS + 1 WHERE ID_VIAJE = ?', [id_viaje]).then(res => {
+      this.buscarRutas()
+    })
+  }
+
+  updateRuta2(id_viaje){
+    this.database.executeSql('UPDATE VIAJE SET ASIENTOS_DISPO = ASIENTOS_DISPO + 1, ASIENTOS_OCUPADOS = ASIENTOS_OCUPADOS - 1 WHERE ID_VIAJE = ?', [id_viaje]).then(res => {
       this.buscarRutas()
     })
   }
@@ -382,6 +387,7 @@ export class BdservicioService {
     let data = [id_viaje, id_usuario];
     return this.database.executeSql('DELETE FROM DETALLE_VIAJE WHERE VIAJE_ID = ? AND USUARIO_ID_USUARIO = ? ', data).then(res => {
       this.buscarRutas()
+      this.rutaActual.next({"usuario_id":"","nombre_usuario":"","viaje_id":"","fecha_viaje":"","hora_salida":"","asientos_dispo":"","monto":"","origen":"","destino":"","status":""})
     })
   }
 
