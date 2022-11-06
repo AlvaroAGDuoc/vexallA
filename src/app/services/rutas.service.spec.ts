@@ -1,13 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RutasService } from './rutas.service';
+import { Rutas } from './rutas.service';
 
-describe('RutasService', () => {
-  let service: RutasService;
+describe('Rutas', () => {
+  let service: Rutas;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(RutasService);
+    TestBed.configureTestingModule({
+      providers: [Rutas]
+    });
+    service = TestBed.inject(Rutas);
   });
 
   it('should be created', () => {

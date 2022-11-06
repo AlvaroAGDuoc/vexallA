@@ -115,7 +115,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'vexallfinalx.db',
+        name: 'vexallfinalx3.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
