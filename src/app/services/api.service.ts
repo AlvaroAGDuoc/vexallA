@@ -22,7 +22,6 @@ export class ApiService {
       retry(3)
     );
   }
-
   
   getUser(id): Observable<any> {
     return this.http.get(this.apiURL + '/users/' + id).pipe(

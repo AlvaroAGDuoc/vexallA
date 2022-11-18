@@ -74,9 +74,12 @@ export class RegistroVehiculoPage implements OnInit {
   }
 
   insertar() {
-    this.servicioBD.agregarVehiculo(this.patente, this.color, this.modelo, this.annio, this.marca_id, this.usuario.id_usuario);
-    this.servicioBD.presentToast("Vehiculo Agregado correctamente");
-    this.router.navigate(['/lista-vehiculo']);
+    if(this.formGroup.valid){
+      this.servicioBD.agregarVehiculo(this.patente, this.color, this.modelo, this.annio, this.marca_id, this.usuario.id_usuario);
+      this.servicioBD.presentToast("Vehiculo Agregado correctamente");
+      this.router.navigate(['/lista-vehiculo']);
+    }
+ 
   }
 
 }

@@ -9,13 +9,13 @@ import { PantallaPrincipalPageRoutingModule } from './pantalla-principal-routing
 import { PantallaPrincipalPage } from './pantalla-principal.page';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     PantallaPrincipalPageRoutingModule,
-    
   ],
   declarations: [PantallaPrincipalPage]
 })

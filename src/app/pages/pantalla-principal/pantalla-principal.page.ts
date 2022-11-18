@@ -20,13 +20,13 @@ export class PantallaPrincipalPage implements OnInit {
   }
 
   desconectarse(){
-    this.storage.set('usuario', this.usuario)
     this.load.loadContent(this.pagina)
   }
 
   async ngOnInit() {
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
+
 
     await this.storage.get('usuario').then((val) => {
       this.usuario = val

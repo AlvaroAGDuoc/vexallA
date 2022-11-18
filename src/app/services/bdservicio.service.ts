@@ -122,7 +122,6 @@ export class BdservicioService {
         this.database = db;
         //llamar a la funcion para crear las tablas
         this.crearTablas();
-
       }).catch(e => {
         //muestro el mensaje de error en caso de ocurrir alguno
         this.presentToast("Error BD:" + e);

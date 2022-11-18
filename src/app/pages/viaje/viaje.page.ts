@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
-import { Router } from '@angular/router';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { LoadingPage } from '../loading/loading.page';
 
@@ -35,9 +34,8 @@ export class ViajePage implements OnInit {
   rutaBuscada: any;
 
 
-  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router, private load: LoadingPage) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private load: LoadingPage) {
   }
-
 
 
   buscarxRuta($event) {

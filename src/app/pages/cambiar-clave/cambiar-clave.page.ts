@@ -31,6 +31,8 @@ export class CambiarClavePage implements OnInit {
     })
 
    }
+
+   
    revisarSiSonIguales(): boolean {
     return this.formGroup.hasError('noSonIguales') &&
       this.formGroup.get('clave').dirty &&

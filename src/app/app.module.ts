@@ -22,7 +22,12 @@ import { DatePipe } from '@angular/common';
 @Injectable({ providedIn: 'any' })
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule, MatProgressSpinnerModule, IonicStorageModule.forRoot({
+  imports: [BrowserModule, 
+    IonicModule.forRoot({
+      rippleEffect: true,
+      mode: 'md'
+    }), 
+  AppRoutingModule, BrowserAnimationsModule, MatProgressSpinnerModule, IonicStorageModule.forRoot({
     driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
   }), HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, SQLite, Camera, Geolocation, DatePipe],

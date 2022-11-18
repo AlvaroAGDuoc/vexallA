@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
+import { Platform } from '@ionic/angular';
 
 import { BdservicioService } from './bdservicio.service';
 
@@ -8,7 +9,7 @@ describe('BdservicioService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SQLite]
+      providers: [SQLite, Platform ]
     });
     service = TestBed.inject(BdservicioService);
   });
@@ -16,4 +17,5 @@ describe('BdservicioService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
 });

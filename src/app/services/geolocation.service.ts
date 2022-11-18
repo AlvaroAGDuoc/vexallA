@@ -18,7 +18,6 @@ export class GeolocationService {
     }).catch((error) => {
       console.log('Error obteniendo la localización', error);
     });
-  
   }
   
 
@@ -44,7 +43,6 @@ export class GeolocationService {
       destination: ruta2,
       travelMode: google.maps.TravelMode.DRIVING
     }, resultado => {
-      console.log(resultado);
       directionRender.setDirections(resultado)
 
       distancia = resultado.routes[0].legs[0].distance.text;

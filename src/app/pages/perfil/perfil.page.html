@@ -16,14 +16,13 @@
     <div *ngIf="usuario.foto !== '[object Blob]' " (click)="tomarFoto()" >
       <img [src]="usuario.foto">
     </div>
-
     <ion-card-header>
       <ion-card-title>Mis datos personales</ion-card-title>
       <hr class="hr">
     </ion-card-header>
     
     <ion-card-content>
-      <p> <a class="quitarEstilo">Nombre de usuario: </a>{{this.usuario.nombre_usuario}}</p>
+      <p> <a class="quitarEstilo nombre_usuario">Nombre de usuario: </a>{{this.usuario.nombre_usuario}}</p>
       <p> <a class="quitarEstilo">Nombre: </a>{{this.usuario.nombre}}</p>
       <p> <a class="quitarEstilo">Apellidos: </a>{{this.usuario.apellidos}}</p>
       <p> <a class="quitarEstilo">Email: </a>{{this.usuario.email}}</p>

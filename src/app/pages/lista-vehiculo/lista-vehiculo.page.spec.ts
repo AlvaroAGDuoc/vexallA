@@ -9,6 +9,7 @@ describe('ListaVehiculoPage', () => {
   let component: ListaVehiculoPage;
   let fixture: ComponentFixture<ListaVehiculoPage>;
 
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ListaVehiculoPage ],
@@ -16,12 +17,13 @@ describe('ListaVehiculoPage', () => {
       providers: [SQLite, Storage]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ListaVehiculoPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture = TestBed.createComponent(ListaVehiculoPage);
+    // component = fixture.componentInstance;
+    // fixture.detectChanges();
   }));
 
   // it('should create', () => {
   //   expect(component).toBeTruthy();
   // });
+
 });

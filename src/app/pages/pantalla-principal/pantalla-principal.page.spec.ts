@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { PantallaPrincipalPage } from './pantalla-principal.page';
+import { BdservicioService } from 'src/app/services/bdservicio.service';
 
 describe('PantallaPrincipalPage', () => {
   let component: PantallaPrincipalPage;
@@ -14,7 +15,7 @@ describe('PantallaPrincipalPage', () => {
     TestBed.configureTestingModule({
       declarations: [ PantallaPrincipalPage ],
       imports: [IonicModule.forRoot()],
-      providers: [Storage, SQLite, ActivatedRoute]
+      providers: [Storage, SQLite, ActivatedRoute,BdservicioService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PantallaPrincipalPage);
@@ -25,4 +26,7 @@ describe('PantallaPrincipalPage', () => {
   // it('should create', () => {
   //   expect(component).toBeTruthy();
   // });
-});
+
+
+  
+})

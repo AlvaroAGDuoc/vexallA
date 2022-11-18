@@ -26,12 +26,8 @@ export class ListaVehiculoPage implements OnInit {
   usuario: any = {};
 
 
-  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router, private alertController: AlertController) {
+  constructor(private servicioBD: BdservicioService, private storage: Storage, private router: Router, private alertController: AlertController) {}
 
-    
-  }
-
-  
   async eliminar(x) {
     const alert = await this.alertController.create({
       header: '¿Estas seguro de eliminar el vehiculo?',
@@ -54,8 +50,6 @@ export class ListaVehiculoPage implements OnInit {
 
     await alert.present();
   }
-
-
 
    ngOnInit() {
 
