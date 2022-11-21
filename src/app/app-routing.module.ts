@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
@@ -43,10 +43,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/viaje/viaje.module').then( m => m.ViajePageModule)
   },
   {
-    path: '',
-    loadChildren: () => import('./pages/splash-screen/splash-screen.module').then( m => m.SplashScreenPageModule)
-  },
-  {
     path: 'ver-recorrido',
     loadChildren: () => import('./pages/ver-recorrido/ver-recorrido.module').then( m => m.VerRecorridoPageModule)
   },
@@ -61,7 +57,8 @@ const routes: Routes = [
   {
     path: 'loading',
     loadChildren: () => import('./pages/loading/loading.module').then( m => m.LoadingPageModule)
-  },  {
+  },
+  {
     path: 'ruta-actual',
     loadChildren: () => import('./pages/ruta-actual/ruta-actual.module').then( m => m.RutaActualPageModule)
   },

@@ -9,15 +9,6 @@ describe('PerfilPage', () => {
   let component: PerfilPage;
   let fixture: ComponentFixture<PerfilPage>;
 
-  let usuario = {
-    id_usuario: 4,
-    nombre_usuario: 'alvaro',
-    clave: 'aa123',
-    nombre: 'Alvaro',
-    apellidos: 'Aguero',
-    email: 'alvaro@gmail.com',
-    rol_id: '1',
-  }
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -36,13 +27,4 @@ describe('PerfilPage', () => {
   //   expect(component).toBeTruthy();
   // });
 
-  it('Muestra el usuario conectado en el perfil', () => {
-
-    component.storage.set('usuario', usuario);
-
-    const compiled = fixture.nativeElement;
-
-    expect(compiled.querySelector('.quitarEstilo nombre_usuario').textContent).toContain('Nombre de usuario: ')
-
-  }) 
 });

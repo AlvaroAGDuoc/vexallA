@@ -17,7 +17,7 @@ export class PerfilPage implements OnInit {
 
   usuario: any = {};
 
-  pagina = 'login'
+  pagina = ''
 
   constructor(public storage: Storage, private router: Router, private load: LoadingPage, private camera: ApiCamaraService, private bd: BdservicioService,  private alertController: AlertController) {
    
@@ -34,7 +34,6 @@ export class PerfilPage implements OnInit {
   }
 
   desconectarse(){
-    // this.storage.set('usuario', this.usuario)
     this.load.loadContent(this.pagina)
   }
 

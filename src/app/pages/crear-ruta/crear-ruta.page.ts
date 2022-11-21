@@ -5,7 +5,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BdservicioService } from 'src/app/services/bdservicio.service';
 import { Storage } from '@ionic/storage-angular';
 import { GeolocationService } from 'src/app/services/geolocation.service';
-import { Router } from '@angular/router';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { DatePipe } from '@angular/common';
 import { LoadingPage } from '../loading/loading.page';
@@ -55,8 +54,8 @@ export class CrearRutaPage implements OnInit {
       vehiculos: new FormControl('', []),
       ruta1: new FormControl('', [Validators.required]),
       ruta2: new FormControl('', [Validators.required]),
-      precio: new FormControl(''),
-      asientos: new FormControl(''),
+      precio: new FormControl('', Validators.min(1500)),
+      asientos: new FormControl('', [Validators.required, Validators.min(1), Validators.max(4)]),
       fecha: new FormControl(''),
     })
 
@@ -130,4 +129,8 @@ export class CrearRutaPage implements OnInit {
   }
 
 
+
+
 }
+
+

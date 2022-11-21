@@ -17,9 +17,9 @@ export class BdservicioService {
   tablaRol: string = "CREATE TABLE IF NOT EXISTS ROL(id_rol INTEGER PRIMARY KEY, nombre_rol VARCHAR(10));";
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS USUARIO(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario VARCHAR(30), clave VARCHAR(30), nombre VARCHAR(30), apellidos VARCHAR(50), email VARCHAR(40), rol_id INTEGER, foto BLOB,  foreign key(rol_id) references ROL(id_rol));";
   tablaMarca: string = "CREATE TABLE IF NOT EXISTS MARCA(id_marca INTEGER PRIMARY KEY AUTOINCREMENT, nombre_marca VARCHAR(20));";
-  tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(6) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
+  tablaAuto: string = "CREATE TABLE IF NOT EXISTS AUTO(patente VARCHAR(9) PRIMARY KEY, color VARCHAR(20), modelo VARCHAR(30), annio INTEGER, usuario_id INTEGER, marca_id INTEGER, foreign key(usuario_id) references USUARIO(id_usuario), foreign key(marca_id) references MARCA(id_marca));";
 
-  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje TEXT, hora_salida VARCHAR(30), asientos_dispo INTEGER, asientos_ocupados INTEGER, monto INTEGER, patente_auto VARCHAR(6), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente) ON DELETE CASCADE);";
+  tablaViaje: string = "CREATE TABLE IF NOT EXISTS VIAJE(id_viaje INTEGER PRIMARY KEY AUTOINCREMENT, fecha_viaje TEXT, hora_salida VARCHAR(30), asientos_dispo INTEGER, asientos_ocupados INTEGER, monto INTEGER, patente_auto VARCHAR(9), origen VARCHAR(80), destino VARCHAR(80), foreign key(patente_auto) references AUTO(patente) ON DELETE CASCADE);";
 
   tablaDetalleViaje = "CREATE TABLE IF NOT EXISTS DETALLE_VIAJE(viaje_id INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, status INTEGER, foreign key(usuario_id_usuario) references USUARIO(id_usuario), foreign key(viaje_id) references VIAJE(id_viaje), PRIMARY KEY(viaje_id, usuario_id_usuario) );";
 
@@ -37,6 +37,7 @@ export class BdservicioService {
   registroMarca6: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (6,'TOYOTA');";
   registroMarca7: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (7,'SUZUKI');";
   registroMarca8: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (8,'HONDA');";
+  registroMarca9: string = "INSERT or IGNORE INTO MARCA(id_marca,nombre_marca) VALUES (9,'BMW');";
 
 
 
@@ -115,7 +116,7 @@ export class BdservicioService {
     this.platform.ready().then(() => {
       //creamos la BD
       this.sqlite.create({
-        name: 'vexallfinalx3.db',
+        name: 'vexallfinalx23233424.db',
         location: 'default'
       }).then((db: SQLiteObject) => {
         //guardamos la conexion a la BD en la variable propia
@@ -151,6 +152,7 @@ export class BdservicioService {
       await this.database.executeSql(this.registroMarca6, []);
       await this.database.executeSql(this.registroMarca7, []);
       await this.database.executeSql(this.registroMarca8, []);
+      await this.database.executeSql(this.registroMarca9, []);
 
 
       //cargar registros en observable
@@ -420,7 +422,7 @@ export class BdservicioService {
   }
 
   buscarRutas() {
-    return this.database.executeSql('SELECT * FROM VIAJE V JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO) JOIN AUTO A ON(A.USUARIO_ID = U.ID_USUARIO)', []).then(res => {
+    return this.database.executeSql('SELECT * FROM AUTO A JOIN VIAJE V ON(A.PATENTE = V.PATENTE_AUTO) JOIN DETALLE_VIAJE DV ON(V.ID_VIAJE = DV.VIAJE_ID) JOIN USUARIO U ON(U.ID_USUARIO = DV.USUARIO_ID_USUARIO)', []).then(res => {
 
       let items: Rutas[] = [];
 

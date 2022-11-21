@@ -14,7 +14,7 @@ export class PantallaPrincipalPage implements OnInit {
   usuario: any = {}
 
   ruta: any = {}
-  pagina = 'login'
+  pagina = ''
   constructor(private storage: Storage, private servicioBD: BdservicioService, private router: Router, private load: LoadingPage ) {
 
   }

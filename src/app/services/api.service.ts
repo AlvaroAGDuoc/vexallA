@@ -15,6 +15,7 @@ export class ApiService {
     })
   }
   apiURL = 'https://my-json-server.typicode.com/victorrosendo/repoUsuariosRamos';
+  apiAutos = 'https://my-json-server.typicode.com/victorrosendo/repoListadoAutos'
 
 
   getUsers(): Observable<any> {
@@ -42,6 +43,13 @@ export class ApiService {
 
   deleteUser(id): Observable<any> {
     return this.http.delete(this.apiURL + '/users/' + id, this.httpOptions);
+  }
+
+
+  getAutos(): Observable<any> {
+    return this.http.get(this.apiAutos + '/autos').pipe(
+      retry(3)
+    );
   }
 
 

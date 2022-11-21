@@ -37,12 +37,11 @@ export class Paso2OlvidadaPage implements OnInit {
   cambiarClave() {
     let clave1 = (document.getElementById('clave1') as HTMLInputElement).value;
     if (this.formGroup.valid) {    
-      console.log('USUAARIO:', this.usuario)
       this.servicioBD.editarClaveNombre(clave1, this.usuario )
       this.servicioBD.presentToast('Clave cambiada con exito')
       this.router.navigate(['/login'])
     }else(
-      this.servicioBD.presentToast2('malo')
+      this.servicioBD.presentToast2('Campos invalidos')
     )
   }
 

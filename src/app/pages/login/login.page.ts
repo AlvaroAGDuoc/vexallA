@@ -16,6 +16,8 @@ export class LoginPage implements OnInit {
 
   usuarios : any;
 
+  autos: any;
+
   foto= new Blob;
 
   constructor( private servicioBD: BdservicioService, private storage: Storage,  private api: ApiService, private loading: LoadingPage) {
@@ -42,7 +44,7 @@ export class LoginPage implements OnInit {
     await this.storage.defineDriver(CordovaSQLiteDriver);
     await this.storage.create();
     
-    this.api.getUsers().subscribe((res) => {
+    await this.api.getUsers().subscribe((res) => {
       this.usuarios = res;
       for(var i = 0; i < this.usuarios.length; i++){
         this.servicioBD.agregarUsuario(this.usuarios[i].id, this.usuarios[i].nombre, this.usuarios[i].clave, '', '', '', this.usuarios[i].id_rol, this.foto)
@@ -50,6 +52,12 @@ export class LoginPage implements OnInit {
     }, (error) => {
       console.log('ERROR USERS', error);
     });
+
+    await this.api.getAutos().subscribe((res)=> {
+      this.autos = res;
+        this.servicioBD.agregarVehiculo(this.autos[0].patente, 'rojo', 'BMA', '2020', 1, 1)
+        this.servicioBD.agregarVehiculo(this.autos[1].patente, 'azul', 'XD', '2022', 9, 1)
+    })
   }
 
 }
